@@ -1,8 +1,13 @@
 # AstraZenecaMar19
 For team AstraZeneca at March Virtual S2DS 2019
 
+# Link to GoogleDrive documents
+https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
+
 # Files uploaded:
         - AstraZeneca_project.docx   
+        - BioPython snippets (Claire, Karsten, Luis)
+        - test_NNN.csv (ID+Summary fro the first NNN-entries of the GEO DataBase)
         
         
 # Information from project description
