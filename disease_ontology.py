@@ -19,4 +19,11 @@ with open ('human_disease_ontology.txt', 'rt') as input_file: # Open file human_
             disease_names.append(new_disease_name)
 
 print(disease_names) # just to check
-#
+
+
+# convert the list into a csv file
+import csv
+with open('diseases.csv', "w") as output:
+    writer = csv.writer(output, lineterminator='\n')
+    for value in disease_names:
+        writer.writerow([value])
