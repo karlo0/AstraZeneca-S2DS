@@ -32,7 +32,7 @@ https://www.ncbi.nlm.nih.gov/geo/info/geo_paccess.html
 
 # DIRECTORY STRUCTURE
 <hr>
-<p>The directory structure of your new project looks like this:</p>
+<p>The directory structure of this project looks like this:</p>
 <pre><code>├── LICENSE
 ├── Makefile           &lt;- Makefile with commands like `make data` or `make train`
 ├── README.md          &lt;- The top-level README for developers using this project.
