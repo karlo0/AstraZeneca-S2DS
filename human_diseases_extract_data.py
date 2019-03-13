@@ -20,7 +20,6 @@ with open ('human_disease_ontology.txt', 'rt') as input_file: # Open file human_
 
 print(disease_names) # just to check
 
-
 # convert the list into a csv file
 import csv
 with open('diseases.csv', "w") as output:
