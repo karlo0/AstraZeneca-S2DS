@@ -44,7 +44,9 @@ data/**
 *~
 *.*~
 *.swp
-*.ipython_checkpoints
+
+# Python checkpoints
+ipython_checkpoints/
 
 # Mac folder header
 .DS_store
