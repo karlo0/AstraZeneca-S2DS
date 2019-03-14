@@ -1,6 +1,52 @@
-.fuse*
+# Raw and PreProc Data
+data/
+data/*
+data/**
+
+# Images, videos and texts
+*.pdf
+*.mpg
+*.png
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Ziped
+*.zip
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Version control
 *~
 *.*~
-geo_data/
-geo_data/*
-geo_data/**
+*.swp
+
+# Mac folder header
+.DS_store
+
+# Others
+.fuse*
