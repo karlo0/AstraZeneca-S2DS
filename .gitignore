@@ -43,7 +43,6 @@ data/**
 # Version control
 *~
 *.*~
-<<<<<<< HEAD
 *.swp
 
 # Python checkpoints
@@ -54,8 +53,3 @@ data/**
 
 # Others
 .fuse*
-=======
-data/local_data/
-data/local_data/*
-data/local_data/**
->>>>>>> 7cd6c2e5ee4f5b6fb2219f451a80f0f6bf07fd3d
