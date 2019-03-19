@@ -41,7 +41,6 @@ idlist = record['IdList']
 count = int(len(idlist))
 print('Total number of found entries: ' + str(count))
 
-
 for start in range(0, count, batch_size):
     print(start)
     if batch_size == 1:
