@@ -8,7 +8,7 @@ Begun on Mon Mar 18 14:30:13 2019
 """
 import pandas as pd
 
-id_name = pd.DataFrame([], columns=['DiseaseId','DiseaseName'])
+id_name = pd.DataFrame([], columns=['Id','Name'])
 
 id_hierarchy_dict = {}
 
@@ -16,26 +16,18 @@ with open('../data/external/d2019_expt.txt') as f:
     #content = f.readline()
     for line in f:
         if line.startswith('MH = '):
-            id_hierarchy_dict['DiseaseName'] = line[5:-1]
+            id_hierarchy_dict['Name'] = line[5:-1]
 #        if line.startswith('MN = '):
 #            value2_temp = line[5:-1]
 #            print(value)
 #            value2 = []
 #            value2.append(value2_temp)
         if line.startswith('UI = '):
-            id_hierarchy_dict['DiseaseId'] = line[5:-1]          
+            id_hierarchy_dict['Id'] = line[5:-1]          
             id_name = id_name.append(id_hierarchy_dict, ignore_index=True)            
 
 print(id_name)
 
-
-
-
-#
-#import pandas as pd
-#
-#df = pd.DataFrame(disease_hierarchy)
-#print(df)
 
 
 
