@@ -23,8 +23,7 @@ with open('d2019_2.txt') as f:
             key = line[5:-1]
             disease_hierarchy[key] = [];
             disease_hierarchy[key].append(value1)
-            disease_hierarchy[key].append(value2)
-            
+            disease_hierarchy[key].append(value2)     
             
 print(disease_hierarchy)
 
