@@ -6,30 +6,36 @@ Begun on Mon Mar 18 14:30:13 2019
 @author: nLp ATTACK
 
 """
-disease_hierarchy = {}
-with open('d2019_2.txt') as f:
+import pandas as pd
+
+diseaseid_diseasename = pd.DataFrame([], columns=['DiseaseId','DiseaseName'])
+
+disease_hierarchy_dict = {}
+
+with open('../data/external/d2019.txt') as f:
     #content = f.readline()
     for line in f:
         if line.startswith('MH = '):
-            value1 = line[5:-1]
-            print(key)
-            
-        if line.startswith('MN = '):
-            value2_temp = line[5:-1]
-            print(value)
-            value2 = []
-            value2.append(value2_temp)
+            disease_hierarchy_dict['DiseaseName'] = line[5:-1]
+#        if line.startswith('MN = '):
+#            value2_temp = line[5:-1]
+#            print(value)
+#            value2 = []
+#            value2.append(value2_temp)
         if line.startswith('UI = '):
-            key = line[5:-1]
-            disease_hierarchy[key] = [];
-            disease_hierarchy[key].append(value1)
-            disease_hierarchy[key].append(value2)     
-            
-print(disease_hierarchy)
+            disease_hierarchy_dict['DiseaseId'] = line[5:-1]          
+            diseaseid_diseasename = diseaseid_diseasename.append(disease_hierarchy_dict, ignore_index=True)            
+
+print(diseaseid_diseasename)
 
 
 
 
+#
+#import pandas as pd
+#
+#df = pd.DataFrame(disease_hierarchy)
+#print(df)
 
 
 
