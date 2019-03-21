@@ -9,7 +9,7 @@ Begun on Mon Mar 18 14:30:13 2019
 import pandas as pd
 
 # initialize
-id_name_tree_df = pd.DataFrame([], columns=['Id','Name', 'ParentTreeNumbers'])
+id_name_tree_df = pd.DataFrame([], columns=['Id','Name', 'TreeNumbers'])
 id_name_tree_dict = {}
 tree_value = []
 
@@ -25,7 +25,7 @@ with open('../data/external/d2019_expt.txt') as f:
             # collect all tree numbers
             tree_value.append(tree_value_temp)
             
-        id_name_tree_dict['ParentTreeNumbers1'] = tree_value       
+        id_name_tree_dict['TreeNumbers'] = tree_value       
                
         if line.startswith('UI = '): # unique id
             tree_value = [] # initialize since all tree numbers are obtained
@@ -33,6 +33,14 @@ with open('../data/external/d2019_expt.txt') as f:
             id_name_tree_df = id_name_tree_df.append(id_name_tree_dict, ignore_index=True)            
 
 print(id_name_tree_df)
+
+
+#D08.811.277.450.430.700.750.111\n
+tree_tag = 'D08.811.277.450.430.700.750.111'
+hierarchy_tags = [];
+for i in range(0,len(tree_tag), 4):
+#    print(i)
+    print(tree_tag[i:i+3])
 
 
 
