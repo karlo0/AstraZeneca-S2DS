@@ -1,53 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Begun on Mon Mar 18 14:30:13 2019
+Begun on Wed Mar 18 14:30:13 2019
 
 @author: nLp ATTACK
 
 """
 import pandas as pd
-import pickle
 id_name_tree_df = pd.read_pickle('../data/processed/id_name_tree.pkl')
 
-#k = (df.Id[df.Id == id_tag].index.tolist())
-
-tree_tag1 = 'D08.811.277.450.430.700.750.111'
-
-#tree_tag_list = []
-#tree_tag_list.append(tree_tag)
-#hierarchy_tags = [];
-#for i in range(0,len(tree_tag), 4):
-#    print(i)
-#    print(tree_tag[0:i+3])
-#    a = (tree_tag[0:i+3])
-
-#k = id_name_tree_df.Id[id_name_tree_df.Id == 'D000039'].index.tolist()
-#print(k)
-#
-#id_name_tree_df['Id'].where(tree_tag2 in id_name_tree_df['TreeNumbers'])
-#
-#k = id_name_tree_df.Id[tree_tag2 in id_name_tree_df['TreeNumbers']].index.tolist()
-#
-#k = (id_name_tree_df.TreeNumbers[id_name_tree_df.TreeNumbers])
-#
-#a = id_name_tree_df['TreeNumbers']
-#for i in range(0,len(a)):
-#    if tree_tag2 in a[i]:
-#        print('True')
-        
-a = id_name_tree_df['TreeNumbers']
-for index, item in enumerate(a):
-    if tree_tag4 in item:
-        print(index, 'True')
-        print(id_name_tree_df.loc[index,'Id'])
-        print(id_name_tree_df.loc[index,'Name'])
-        
-        
-#k = (id_name_tree_df.TreeNumbers[id_name_tree_df.TreeNumbers == tree_tag_list].index.tolist())
-#print(k)
-
+all_tree_numbers = id_name_tree_df['TreeNumbers']
+def convert_treenumber_to_tree_hierarchy(tree_number):
+    hierarchy_list = [];
+    for i in range(0,len(tree_number), 4):
+        print(tree_number[0:i+3])
+        tree_number_portion = (tree_number[0:i+3]) + '\n'
+        for index, item in enumerate(all_tree_numbers):
+            if tree_number_portion in item:                
+                hierarchy_list.append(id_name_tree_df.loc[index,'Name'])
+    return(hierarchy_list)
     
+print(convert_treenumber_to_tree_hierarchy('D08.811.277.450.430.700.750.111\n'))
+
+
+ 
     
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
 # unfortunately the Slimmappings were not accurate and omitted important information.
