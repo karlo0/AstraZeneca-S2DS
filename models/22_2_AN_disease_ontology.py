@@ -7,20 +7,48 @@ Begun on Mon Mar 18 14:30:13 2019
 
 """
 import pandas as pd
-df = pd.read_pickle('../data/processed/id_name_tree.pkl')
-print(df)
+import pickle
+id_name_tree_df = pd.read_pickle('../data/processed/id_name_tree.pkl')
 
-##D08.811.277.450.430.700.750.111\n
-#tree_tag = 'D08.811.277.450.430.700.750.111'
+#k = (df.Id[df.Id == id_tag].index.tolist())
+
+tree_tag1 = 'D08.811.277.450.430.700.750.111'
+
+#tree_tag_list = []
+#tree_tag_list.append(tree_tag)
 #hierarchy_tags = [];
 #for i in range(0,len(tree_tag), 4):
-##    print(i)
-#    print(tree_tag[i:i+3])
+#    print(i)
+#    print(tree_tag[0:i+3])
+#    a = (tree_tag[0:i+3])
 
+#k = id_name_tree_df.Id[id_name_tree_df.Id == 'D000039'].index.tolist()
+#print(k)
+#
+#id_name_tree_df['Id'].where(tree_tag2 in id_name_tree_df['TreeNumbers'])
+#
+#k = id_name_tree_df.Id[tree_tag2 in id_name_tree_df['TreeNumbers']].index.tolist()
+#
+#k = (id_name_tree_df.TreeNumbers[id_name_tree_df.TreeNumbers])
+#
+#a = id_name_tree_df['TreeNumbers']
+#for i in range(0,len(a)):
+#    if tree_tag2 in a[i]:
+#        print('True')
+        
+a = id_name_tree_df['TreeNumbers']
+for index, item in enumerate(a):
+    if tree_tag4 in item:
+        print(index, 'True')
+        print(id_name_tree_df.loc[index,'Id'])
+        print(id_name_tree_df.loc[index,'Name'])
+        
+        
+#k = (id_name_tree_df.TreeNumbers[id_name_tree_df.TreeNumbers == tree_tag_list].index.tolist())
+#print(k)
 
-
-
-
+    
+    
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
 # unfortunately the Slimmappings were not accurate and omitted important information.
 # e.g., the disease tag Diabetic Nephropathies with the disease ID D003928 had the hierarchy 
