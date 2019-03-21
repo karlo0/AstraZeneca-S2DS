@@ -22,8 +22,12 @@ def convert_treenumber_to_tree_hierarchy(tree_number):
     
 print(convert_treenumber_to_tree_hierarchy('D08.811.277.450.430.700.750.111\n'))
 
+#import pickle
+#data_df = pd.read_pickle('disease_tags_dnorm_advanced.pkl')
+df = pd.read_pickle('disease_tags.pkl')
 
- 
+D009091
+
     
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
 # unfortunately the Slimmappings were not accurate and omitted important information.
