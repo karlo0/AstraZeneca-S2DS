@@ -7,13 +7,14 @@ Begun on Mon Mar 18 14:30:13 2019
 """
 
 import pandas as pd
+import pickle
 
 # initialize
 id_name_tree_df = pd.DataFrame([], columns=['Id','Name', 'TreeNumbers'])
 id_name_tree_dict = {}
 tree_value = []
 
-with open('../data/external/d2019_expt.txt') as f:    
+with open('../data/external/d2019.txt') as f:    
     for line in f: # cycle through each line
         if line.startswith('MH = '): # name
             id_name_tree_dict['Name'] = line[5:-1]
@@ -32,4 +33,4 @@ with open('../data/external/d2019_expt.txt') as f:
             id_name_tree_dict['Id'] = line[5:-1]
             id_name_tree_df = id_name_tree_df.append(id_name_tree_dict, ignore_index=True)            
 
-print(id_name_tree_df)
+id_name_tree_df.to_pickle('../data/processed/id_name_tree.pkl')
