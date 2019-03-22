@@ -49,7 +49,7 @@ def import_arrange_df_tags_from_pmid():
 def import_meshid_name_tree():
     fname = "id_name_tree.pkl"
     print("start load Arun's mesh id to name df")
-    df = pickle.load( open(l_data_final_dir+fname, 'rb') )
+    df = pickle.load( open("../../data/external/"+fname, 'rb') )
     print("done")
     return df
 
