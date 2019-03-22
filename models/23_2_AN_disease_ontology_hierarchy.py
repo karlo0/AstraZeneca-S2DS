@@ -9,6 +9,7 @@ Begun on Wed Mar 18 14:30:13 2019
 import pandas as pd
 id_name_tree_df = pd.read_pickle('../data/processed/id_name_tree.pkl')
 
+
 all_tree_numbers = id_name_tree_df['TreeNumbers']
 def convert_treenumber_to_tree_hierarchy(tree_number):
     hierarchy_list = [];
@@ -20,13 +21,27 @@ def convert_treenumber_to_tree_hierarchy(tree_number):
                 hierarchy_list.append(id_name_tree_df.loc[index,'Name'])
     return(hierarchy_list)
     
-print(convert_treenumber_to_tree_hierarchy('D08.811.277.450.430.700.750.111\n'))
+#print(convert_treenumber_to_tree_hierarchy('D08.811.277.450.430.700.750.111\n'))
 
-#import pickle
-#data_df = pd.read_pickle('disease_tags_dnorm_advanced.pkl')
-df = pd.read_pickle('disease_tags.pkl')
+def convert_diseaseid_to_tree_hierarchy(diseaseid):
+    row_index = id_name_tree_df.index[id_name_tree_df['Id'] == 'D009091'].tolist()
+    tree_number_list = id_name_tree_df.loc[row_index,'TreeNumbers']
+    disease_hierarchy_list = []
+    for tree_number_from_diseaseid in tree_number_list:
+        print(tree_number_from_diseaseid)
+#        disease_hierarchy_list.append(convert_treenumber_to_tree_hierarchy(tree_number_from_diseaseid))
+    return disease_hierarchy_list
+        
+        
+#print(tree_number_list)
+    
+print(convert_diseaseid_to_tree_hierarchy('D009091'))
 
-D009091
+##import pickle
+##data_df = pd.read_pickle('disease_tags_dnorm_advanced.pkl')
+#df = pd.read_pickle('disease_tags.pkl')
+#
+#
 
     
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
