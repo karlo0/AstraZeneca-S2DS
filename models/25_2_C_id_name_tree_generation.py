@@ -4,32 +4,33 @@
 
 @author: nLp ATTACK
 
-# This code downloads tree IDs and supplemental concept records (SCRs) and puts them into one df
-# file from here: ftp://nlmpubs.nlm.nih.gov/online/mesh/MESH_FILES/asciimesh/ 
+This code downloads tree IDs and supplemental concept records (SCRs) and puts them into one df
 
-# output df columns are: 
-# 'category': record type (eg disease='C')
-# 'mesh_id': unique id (UI) given to record (eg, D013614)
-# 'mesh_heading': concept name (eg, 'Adams Nance syndrome')
-# 'mesh_treenumbers': address in tree, with sub categories separated by '.' 
-# (eg C14.280.067.845.695), one concept can have many mesh_treenumbers
-# 'scr': is this a supplemental concept record. 0 for no, 1 for yes. There are ~600K SCRs and ~50K MeSH records
+output df columns are: 
+'category': record type (eg disease='C')
+'mesh_id': unique id (UI) given to record (eg, D013614)
+'mesh_heading': concept name (eg, 'Adams Nance syndrome')
+'mesh_treenumbers': address in tree, with sub categories separated by . 
+(eg C14.280.067.845.695), one concept can have many mesh_treenumbers
+'scr': is this a supplemental concept record. 0 for no, 1 for yes. There are ~600K SCRs and ~50K MeSH records
 
 
-# SCRs Supplemental concept records:
-# more info: search MeSH here https://meshb.nlm.nih.gov/search and more info here https://www.nlm.nih.gov/mesh/intro_record_types.html
-# Fields of SCR file:
-# The names (NM) are new concepts
-# the NMs map to certain concepts that are already in the MeSH (HM)
-# The SCRs have their own unique identifiers UIs as well
+SCRs Supplemental concept records:
+more info: search MeSH here https://meshb.nlm.nih.gov/search and more info here https://www.nlm.nih.gov/mesh/intro_record_types.html
+download here: ftp://nlmpubs.nlm.nih.gov/online/mesh/MESH_FILES/
+Fields of SCR text file:
+The names (NM) are new concepts
+the NMs map to certain concepts that are already in the MeSH (HM)
+The SCRs have their own unique identifiers UIs as well
 
-# How can we deal with SCR?
-# These new concepts might be tags of Karsten's PMID data for example
-# We can map the new record names NMs to existing MeSH ids (UIs and tree IDs) 
-# -- this is the only way of linking this data with the tree. Then we search SCRs as if they were mesh headings
-# result: in our use case, we can search the tags for disease names, including SCR names
+How can we deal with SCR?
+These new concepts might be tags of Karsten's PMID data for example
+We can map the new record names NMs to existing MeSH ids (UIs and tree IDs) 
+-- this is the only way of linking this data with the tree. Then we search SCRs as if they were mesh headings
+result: in our use case, we can search the tags for disease names, including SCR names 
 
 """
+
 
 import pandas as pd
 import pickle
@@ -106,17 +107,29 @@ scr_df = scr_df.drop('variable',axis=1)
 scr_df.columns = ['SCR_id','SCR_name', 'mesh_heading']
 scr_df = scr_df.dropna()
 
-# SCR_name becomes new mesh_heading so we can search directly for the SCRs, then add to main df
-scr_df = pd.merge(scr_df[['SCR_name', 'mesh_heading']], df, on='mesh_heading', how='inner')
-scr_df = scr_df.drop('mesh_heading', axis = 1)
-scr_df = scr_df.rename(index=str, columns = {'SCR_name':'mesh_heading'})
+# Let's map SCR info to the main df info
+# SCR_heading becomes new mesh_heading
+# set map_scrUI_to_meshUI__OR__use_scrUI_as_UI: 
+# we can map the scr UIs to the existing mesh UIs (0) 
+# or use the scr UIs as UI (1)
+map_scrUI_to_meshUI__OR__use_scrUI_as_UI =1
+
+if map_scrUI_to_meshUI__OR__use_scrUI_as_UI ==0: 
+    scr_df = pd.merge(scr_df[['SCR_heading', 'mesh_heading']], df, on='mesh_heading', how='inner')
+    scr_df = scr_df.drop('mesh_heading', axis = 1)
+    scr_df = scr_df.rename(index=str, columns = {'SCR_heading':'mesh_heading'})
+elif map_scrUI_to_meshUI__OR__use_scrUI_as_UI ==1:
+    scr_df = pd.merge(scr_df[['SCR_heading', 'mesh_heading', 'SCR_id']], df, on='mesh_heading', how='inner')
+    scr_df = scr_df.drop(['mesh_heading','mesh_id'], axis = 1)
+    scr_df = scr_df.rename(index=str, columns = {'SCR_heading':'mesh_heading', 'SCR_id':'mesh_id'})
+    
 scr_df['scr'] = 1
 
 df['scr'] = 0
 
 df = pd.concat([df, scr_df], ignore_index=True)
 
-df.to_pickle('../data/processed/id_name_tree.pkl')
+df.to_pickle('../data/processed/id_name_tree_with_SCR.pkl')
 
 
 # extra piece of code: 
