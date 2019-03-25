@@ -29,6 +29,14 @@ def convert_diseaseid_to_tree_hierarchy(diseaseid):
    
 print(convert_diseaseid_to_tree_hierarchy('D000003'))
 
+def convert_treenumber_to_parents(tree_number):
+    parents_list = [];
+    for i in range(0,len(tree_number), 4):
+        parents_list.append((tree_number[0:i+3]))
+    return parents_list    
+
+print(convert_treenumber_to_parents('D08.811.277.450.430.700.750.111\n'))
+
 
 
 
