@@ -14,7 +14,7 @@ id_name_tree_df = pd.DataFrame([], columns=['Id','Name', 'TreeNumbers'])
 id_name_tree_dict = {}
 tree_value = []
 
-with open('../data/external/d2019.txt') as f:    
+with open('../data/external/d2019.txt') as f:
     for line in f: # cycle through each line
         if line.startswith('MH = '): # name
             id_name_tree_dict['Name'] = line[5:-1]
