@@ -7,41 +7,30 @@ Begun on Wed Mar 18 14:30:13 2019
 
 """
 import pandas as pd
-id_name_tree_df = pd.read_pickle('../data/processed/id_name_tree.pkl')
+id_name_tree_df = pd.read_pickle('../../data/processed/id_name_tree.pkl')
 
 
-all_tree_numbers = id_name_tree_df['TreeNumbers']
-def convert_treenumber_to_tree_hierarchy(tree_number):
-    hierarchy_list = [];
-    for i in range(0,len(tree_number), 4):
-        print(tree_number[0:i+3])
-        tree_number_portion = (tree_number[0:i+3]) + '\n'
-        for index, item in enumerate(all_tree_numbers):
-            if tree_number_portion in item:                
-                hierarchy_list.append(id_name_tree_df.loc[index,'Name'])
-    return(hierarchy_list)
-    
-#print(convert_treenumber_to_tree_hierarchy('D08.811.277.450.430.700.750.111\n'))
+id_name_tree_df = pd.DataFrame([{'id': 'D000001',  'Name': 'Calcimycin', 'TreeNumbers': 'D03.633.100.221.173'},
+         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.705.400.625.800'},
+         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.705.539.345.800'},
+         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.886.300.692.800'},
+         {'id': 'D000003',  'Name': 'Abattoirs',  'TreeNumbers': 'J01.576.423.200.700.100'},
+         {'id': 'D000003',  'Name': 'Abattoirs',  'TreeNumbers': 'J03.540.020'},
+         {'id': 'D000004',  'Name': 'Abbreviations as Topic',  'TreeNumbers': 'L01.559.598.400.556.131'}])
 
 def convert_diseaseid_to_tree_hierarchy(diseaseid):
-    row_index = id_name_tree_df.index[id_name_tree_df['Id'] == 'D009091'].tolist()
-    tree_number_list = id_name_tree_df.loc[row_index,'TreeNumbers']
+    row_index_list = id_name_tree_df.index[id_name_tree_df['id'] == diseaseid].tolist()    
     disease_hierarchy_list = []
-    for tree_number_from_diseaseid in tree_number_list:
-        print(tree_number_from_diseaseid)
-#        disease_hierarchy_list.append(convert_treenumber_to_tree_hierarchy(tree_number_from_diseaseid))
+    for row_index in row_index_list:
+        tree_number = id_name_tree_df.loc[row_index,'TreeNumbers']
+        disease_hierarchy_list.append(tree_number)
     return disease_hierarchy_list
         
-        
-#print(tree_number_list)
-    
-print(convert_diseaseid_to_tree_hierarchy('D009091'))
+   
+print(convert_diseaseid_to_tree_hierarchy('D000003'))
 
-##import pickle
-##data_df = pd.read_pickle('disease_tags_dnorm_advanced.pkl')
-#df = pd.read_pickle('disease_tags.pkl')
-#
-#
+
+
 
     
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
