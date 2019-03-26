@@ -3,6 +3,11 @@ data/
 data/*
 data/**
 
+# whitelist (include) the data folder under src
+!/src/data/
+!/src/data/*
+!/src/data/**
+
 # Images, videos and texts
 *.pdf
 *.mpg
