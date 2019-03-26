@@ -21,7 +21,7 @@ with open('../data/external/d2019.txt') as f:
         
         if line.startswith('MN = '): # tree numbers
             # collect tree number for each line            
-            tree_value_temp = line[5:] 
+            tree_value_temp = line[5:-1]
             # include last char \n because it will help to search each level of the tree
             # collect all tree numbers
             tree_value.append(tree_value_temp)
