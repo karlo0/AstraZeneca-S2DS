@@ -19,7 +19,6 @@ id_name_tree_df = pd.read_pickle('../../data/processed/id_name_tree_without_SCR.
 
 def convert_diseaseid_to_tree_numbers(diseaseid):
     row_indexes = id_name_tree_df.index[id_name_tree_df['mesh_id'] == diseaseid].tolist()
-    print(row_indexes)
     tree_numbers = []
     for row_index in row_indexes:
         tree_num = id_name_tree_df.loc[row_index,'mesh_treenumbers']
@@ -30,25 +29,35 @@ def convert_diseaseid_to_tree_numbers(diseaseid):
 ##data_df = pd.read_pickle('disease_tags_dnorm_advanced.pkl')
 #df = pd.read_pickle('disease_tags.pkl')
 
-#def convert_treenumber_to_tree_hierarchy(tree_number):
-#    all_tree_numbers = id_name_tree_df['TreeNumbers']
-#    all_parents = [];
-#    for i in range(0,len(tree_number), 4):
-#        all_parents.append((tree_number[0:i+3]))    
-#    
-#    hierarchy_list = [];
-#    for index, item in enumerate(all_tree_numbers):
-#        if tree_number_portion in item:                
-#            hierarchy_list.append(id_name_tree_df.loc[index,'Name'])
-#    return(hierarchy_list)
+def convert_treenumber_to_tree_hierarchy(tree_number):
+    all_tree_numbers = id_name_tree_df['mesh_treenumbers']
+#    print('C19.391.119.096.875' in all_tree_numbers)
+    all_parents = [];
+    for i in range(0,len(tree_number), 4):
+        all_parents.append((tree_number[0:i+3]))    
+#    print(all_parents)
+    hierarchy_list = [];
+    for parent in all_parents:                               
+        row_index = id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == parent].values[0]
+        hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])            
+    return(hierarchy_list)
+    
+    
+#hierarchy_list = [];
+#a = print(
+#
+#print(id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == 'D03.633.100.221.173'].tolist())
+#
+#hierarchy_list.append(id_name_tree_df['mesh_heading']=id_name_tree_df['mesh_treenumbers']=='D03.633.100.221.173')
+#
+#
+#hierarchy_list.append((id_name_tree_df.at[id_name_tree_df['mesh_treenumbers']=='D03.633.100.221.173','mesh_heading'])]1)
 
-disease_id = 'D000002'
-print(convert_diseaseid_to_tree_numbers(disease_id))
-
-#all_tree_numbers = convert_diseaseid_to_tree_numbers(disease_id)
-#print(all_tree_numbers)
-#for tree_number in all_tree_numbers:
-#    print(convert_treenumber_to_tree_hierarchy(tree_number))
+disease_id = 'D000021'
+all_tree_numbers = convert_diseaseid_to_tree_numbers(disease_id)
+print(all_tree_numbers)
+for tree_number in all_tree_numbers:
+    print(convert_treenumber_to_tree_hierarchy(tree_number))
 
     
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
