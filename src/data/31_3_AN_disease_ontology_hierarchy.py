@@ -7,44 +7,30 @@ Begun on Wed Mar 18 14:30:13 2019
 
 """
 import pandas as pd
-id_name_tree_df = pd.read_pickle('../../data/processed/id_name_tree_without_SCR.pkl')
 
-def convert_diseaseid_to_tree_numbers(diseaseid):
-    row_indexes = id_name_tree_df.index[id_name_tree_df['mesh_id'] == diseaseid].tolist()
+# read the mesh database pkl file
+id_name_tree_df = pd.read_pickle('../../data/final/id_name_tree_without_SCR.pkl')
+
+# takes a meshid and converts it into tree numbers
+def convert_meshid_to_tree_numbers(mesh_id):
+    row_indexes = id_name_tree_df.index[id_name_tree_df['mesh_id'] == mesh_id].tolist()
+    # append the tree numbers to a list
     tree_numbers = []
     for row_index in row_indexes:
         tree_num = id_name_tree_df.loc[row_index,'mesh_treenumbers']
         tree_numbers.append(tree_num)
     return tree_numbers
 
-def convert_treenumber_to_tree_hierarchy(tree_number):    
+def convert_treenumber_to_tree_hierarchy(tree_number):
     all_parents = [];
     for i in range(0,len(tree_number), 4):
-        all_parents.append((tree_number[0:i+3]))    
-        
+        all_parents.append((tree_number[0:i+3]))        
     hierarchy_list = [];
     for parent in all_parents:                               
         row_index = id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == parent].values[0]
-        hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])            
+        hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
-    
-##data_df = pd.read_pickle('disease_tags_dnorm_advanced.pkl')
-#df = pd.read_pickle('disease_tags.pkl')
-
-disease_id = 'D000121'
-all_tree_numbers = convert_diseaseid_to_tree_numbers(disease_id)
-print(all_tree_numbers)
-for tree_number in all_tree_numbers:
-    print(convert_treenumber_to_tree_hierarchy(tree_number))
-    
-    
-#id_name_tree_df = pd.DataFrame([{'id': 'D000001',  'Name': 'Calcimycin', 'TreeNumbers': 'D03.633.100.221.173'},
-#         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.705.400.625.800'},
-#         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.705.539.345.800'},
-#         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.886.300.692.800'},
-#         {'id': 'D000003',  'Name': 'Abattoirs',  'TreeNumbers': 'J01.576.423.200.700.100'},
-#         {'id': 'D000003',  'Name': 'Abattoirs',  'TreeNumbers': 'J03.540.020'},
-#         {'id': 'D000004',  'Name': 'Abbreviations as Topic',  'TreeNumbers': 'L01.559.598.400.556.131'}])
+ 
 
     
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
