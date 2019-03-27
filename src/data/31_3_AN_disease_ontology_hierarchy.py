@@ -7,6 +7,14 @@ Begun on Wed Mar 18 14:30:13 2019
 
 """
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+#print(all_hierarchies)
+from PIL import Image
+#import WordCloud
+#import matplotlib.pyplot as plt
+from wordcloud import WordCloud, STOPWORDS
+
 
 # read the mesh database pkl file
 id_name_tree_df = pd.read_pickle('../../data/final/id_name_tree_without_SCR.pkl')
@@ -31,7 +39,55 @@ def convert_treenumber_to_tree_hierarchy(tree_number):
         hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
  
+pmid_df = pd.read_pickle('../../data/final/geo_id_mesh_from_pmid.pkl')
 
+id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
+
+new_dict = {}
+for item in id_name_tree_df_temp.mesh_heading:
+#    print(item)
+    new_dict[item] = 0
+
+count = 0
+for row_index in range(0,len(pmid_df['mesh_uis'])):
+#for row_index in range(0,100):
+#for row_index in range(0,1):
+    all_ids_row_index = pmid_df.loc[row_index,'mesh_uis']        
+    all_hierarchies = []
+    for id_row_index in all_ids_row_index:        
+        tree_numbers_id = convert_meshid_to_tree_numbers(id_row_index)        
+        for tree_number in tree_numbers_id:            
+            if tree_number[0] == 'C':
+                hierarchy = convert_treenumber_to_tree_hierarchy(tree_number)                               
+#                print(hierarchy)                
+                if not hierarchy[0].startswith('Pathological'):
+                    count+=1
+                    for item in hierarchy:
+                        all_hierarchies.append(item)
+#                        print(all_hierarchies, len(all_hierarchies))
+                        s = set(all_hierarchies)
+#    print(s, len(s))
+    for item in s:
+        new_dict[item] = new_dict[item] + 1
+
+
+    
+#    print(convert_treenumber_to_tree_hierarchy(tree_number)))
+
+#disease_id = disease_ids[]
+#all_tree_numbers = convert_diseaseid_to_tree_numbers(disease_id)
+#print(all_tree_numbers)
+#for tree_number in all_tree_numbers:
+#    print(convert_treenumber_to_tree_hierarchy(tree_number))
+#    
+    
+#id_name_tree_df = pd.DataFrame([{'id': 'D000001',  'Name': 'Calcimycin', 'TreeNumbers': 'D03.633.100.221.173'},
+#         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.705.400.625.800'},
+#         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.705.539.345.800'},
+#         {'id': 'D000002',  'Name': 'Temefos',  'TreeNumbers': 'D02.886.300.692.800'},
+#         {'id': 'D000003',  'Name': 'Abattoirs',  'TreeNumbers': 'J01.576.423.200.700.100'},
+#         {'id': 'D000003',  'Name': 'Abattoirs',  'TreeNumbers': 'J03.540.020'},
+#         {'id': 'D000004',  'Name': 'Abbreviations as Topic',  'TreeNumbers': 'L01.559.598.400.556.131'}])
     
 # this function is deprecated because it uses SlimMappings given in MEDIC vocabulary.
 # unfortunately the Slimmappings were not accurate and omitted important information.
