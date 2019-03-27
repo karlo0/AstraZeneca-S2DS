@@ -39,7 +39,7 @@ https://www.ncbi.nlm.nih.gov/geo/info/geo_paccess.html
 ├── data
 │   ├── external       &lt;- Data from third party sources.
 │   ├── interim        &lt;- Intermediate data that has been transformed.
-│   ├── processed      &lt;- The final, canonical data sets for modeling.
+│   ├── final          &lt;- The final, canonical data sets for modeling.
 │   └── raw            &lt;- The original, immutable data dump.
 │
 ├── docs               &lt;- A default Sphinx project; see sphinx-doc.org for details
