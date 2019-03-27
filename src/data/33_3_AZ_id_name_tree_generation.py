@@ -40,16 +40,22 @@ import numpy as np
 import os
 
 # define 
-include_SCR = 0
+include_SCR = 1
+
 if include_SCR == 0:
     output_file = 'mesh.pkl'
 elif include_SCR == 1:
     output_file = 'mesh_wSCR.pkl'
 
-output_path = '../data/final/'   
+# cdir = dir of this script
+cdir = os.path.dirname(os.path.realpath(__file__))
+# basedir = root dir of the repository
+basedir = os.path.dirname(os.path.dirname(cdir))
 
-if os.path.isdir(output_path)!=1:
-    os.mkdir(output_path)
+dir_data_out = basedir+"/data/final/"
+
+if os.path.isdir(dir_data_out)!=1:
+    os.mkdir(dir_data_out)
 
 # initialize
 tree_value = []
@@ -57,7 +63,7 @@ name_list = []
 tree_number_list = []
 id_list = []
 
-with open('../data/external/d2019.txt') as f:
+with open(basedir+'/data/external/d2019.txt') as f:
     for line in f: # cycle through each line
         
         if line.startswith('MH = '): # name
@@ -100,7 +106,7 @@ if include_SCR ==1:
     maps_to_list = []
     id_list = []
 
-    with open('../data/external/c2019.txt') as f:
+    with open(basedir+'/data/external/c2019.txt') as f:
         for line in f: # cycle through each line
 
             if line.startswith('NM = '): # new name
@@ -150,4 +156,4 @@ if include_SCR ==1:
 
 df = pd.concat([df, no_tree_number_df], ignore_index=True)
 
-df.to_pickle(os.path.join(output_path,output_file))
+df.to_pickle(os.path.join(dir_data_out,output_file))
