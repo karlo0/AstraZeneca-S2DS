@@ -64,6 +64,8 @@ https://www.ncbi.nlm.nih.gov/geo/info/geo_paccess.html
 │   ├── data           &lt;- Scripts to download or generate data
 │   │   └── make_dataset.py
 │   │
+│   ├── external       &lt;- external programs and apis
+│   │   
 │   ├── features       &lt;- Scripts to turn raw data into features for modeling
 │   │   └── build_features.py
 │   │
