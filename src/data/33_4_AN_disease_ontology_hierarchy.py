@@ -33,39 +33,6 @@ def convert_treenumber_to_tree_hierarchy(tree_number):
         hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
 
-# code for luis' graph
-# objective is to produce csv file with column1 = mesh_id and column2 = parent
-# read input geo data
-pmid_df = pd.read_pickle('../../data/final/geo.pkl')
-disease_pmid_df = pmid_df[pmid_df.category=='C'] # select only diseases
-## set up disease vocabulary subset df of main mesh df
-#disease_id_name_tree_df = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
-
-# initialize
-all_parents = []
-all_diseases = []
-partial_disease_pmid_df = disease_pmid_df.iloc[0:3,] # only for testing
-# go through the entire input data
-for row_index, row in partial_disease_pmid_df.iterrows():
-#for row_index, row in disease_pmid_df.iterrows():
-    # find all tree numbers corresonding to the mesh_id for that row
-    # (each mesh_id may often have multiple tree numbers)
-    all_tree_numbers = convert_meshid_to_tree_numbers(disease_pmid_df.loc[row_index,'mesh_id'])    
-    print(all_tree_numbers)
-    # iterate over the tree_numbers
-    for tree_number in all_tree_numbers:        
-        parent_tree_number = tree_number[0:-4] # select parent tree id
-        # find the mesh row in the vocab df for that parent tree number
-        mesh_row_index = id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == parent_tree_number].values[0]
-        # find the parent 
-        parent = (id_name_tree_df.loc[row_index,'mesh_id'])
-        all_diseases.append(disease_pmid_df.loc[row_index,'mesh_id'])
-        all_parents.append(parent)
-
-
-print(all_diseases)
-print(all_parents)
-
 ## initialize dictionary for storing disease counts
 #id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
 #new_dict = {}
@@ -99,6 +66,50 @@ print(all_parents)
 ##max(A, key=A.get)
 #from collections import Counter
 #print(Counter(new_dict).most_common(15))
+       
+    
+
+
+# code for luis' graph
+# objective is to produce csv file with column1 = mesh_id and column2 = parent
+# read input geo data
+pmid_df = pd.read_pickle('../../data/final/geo.pkl')
+disease_pmid_df = pmid_df[pmid_df.category=='C'] # select only diseases
+## set up disease vocabulary subset df of main mesh df
+#disease_id_name_tree_df = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
+
+# initialize
+all_parents = []
+all_diseases = []
+all_records = []
+partial_disease_pmid_df = disease_pmid_df.iloc[0:3,] # only for testing
+# go through the entire input data
+for row_index, row in partial_disease_pmid_df.iterrows():
+#for row_index, row in disease_pmid_df.iterrows():
+    # find all tree numbers corresonding to the mesh_id for that row
+    # (each mesh_id may often have multiple tree numbers)
+    all_tree_numbers = convert_meshid_to_tree_numbers(disease_pmid_df.loc[row_index,'mesh_id'])    
+    print(all_tree_numbers)
+    # iterate over the tree_numbers
+    for tree_number in all_tree_numbers:        
+        parent_tree_number = tree_number[0:-4] # select parent tree id
+        # find the mesh row in the vocab df for that parent tree number
+        mesh_row_index = id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == parent_tree_number].values[0]
+        # find the parent 
+        parent_id = (id_name_tree_df.loc[row_index,'mesh_id'])
+        disease_id = (disease_pmid_df.loc[row_index,'mesh_id'])
+#        all_parents.append(parent)        
+        all_records.append([disease_id, parent_id])
+
+print(all_diseases)
+print(all_parents)
+print(all_records)
+
+
+
+
+
+
 
 # * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = #
 # * = * = * = * = * = * = * = * Archives * = * = * = * = * = * = * = * = * = #
