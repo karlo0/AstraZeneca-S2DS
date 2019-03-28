@@ -48,25 +48,48 @@ def convert_meshid_to_tree_numbers(mesh_id):
         tree_numbers.append(tree_num)
     return tree_numbers
 
-def convert_treenumber_to_tree_hierarchy(tree_number):
+def convert_treenumber_to_parent_tree_hierarchy(tree_number):
     """
-    takes a treenumber and converts it into parent tree hierarchy
-    output is a 
+    takes a treenumber and converts it into its parent tree hierarchy of mesh_headings.
+    the topmost mesh heading in the hierarchachy is the first entry followed by the 
+    next one and so on till the mesh heading for the input tree number
+    str -> list
+    Examples:
+        >>> convert_treenumber_to_tree_hierarchy('N06.850.460.350.850.500.031')
+        >>> ['Environment and Public Health', 'Public Health', 'Environmental Pollution',
+             'Environmental Exposure', 'Radiation Exposure', 'Radiation Injuries',
+             'Abnormalities, Radiation-Induced']
+        {Note: 'N06.850.460.350.850.500.031' = Abnormalities, Radiation-Induced}
+        
+        >>> convert_treenumber_to_tree_hierarchy('C26.733.031')
+        >>> ['Wounds and Injuries', 'Radiation Injuries', 'Abnormalities, Radiation-Induced']
+        
+        >>> convert_treenumber_to_tree_hierarchy('C16.131')
+        >>> ['Congenital, Hereditary, and Neonatal Diseases and Abnormalities', 'Congenital Abnormalities']
+    
+        >>> convert_treenumber_to_tree_hierarchy('C18.452.584.500.875.440.500')
+        >>> ['Nutritional and Metabolic Diseases', 'Metabolic Diseases', 'Lipid Metabolism Disorders',
+             'Dyslipidemias', 'Hypolipoproteinemias', 'Hypobetalipoproteinemias', 'Abetalipoproteinemia']
+
+        >>> convert_treenumber_to_tree_hierarchy('D09.067.342.356.050')
+        >>> ['Carbohydrates', 'Amino Sugars', 'Hexosamines', 'Galactosamine', 'Acetylgalactosamine']
+    
     """
+    # make list of parents' tree numbers
     all_parents = [];
     for i in range(0,len(tree_number), 4):
         all_parents.append((tree_number[0:i+3]))
     hierarchy_list = [];
     for parent in all_parents:                               
-        row_index = id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == parent].values[0]
-        hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])
+        row_index = mesh_df.index[mesh_df['mesh_treenumbers'] == parent].values[0]
+        hierarchy_list.append(mesh_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
 
-# initialize dictionary for storing disease counts
-id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
-new_dict = {}
-for item in id_name_tree_df_temp.mesh_heading:
-    new_dict[item] = 0
+## initialize dictionary for storing disease counts
+#id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
+#new_dict = {}
+#for item in id_name_tree_df_temp.mesh_heading:
+#    new_dict[item] = 0
 
 ## count the entries
 #pmid_df = pd.read_pickle('../../data/final/geo.pkl')
