@@ -3,7 +3,7 @@ from Bio import Entrez
 import pandas as pd
 import numpy as np
 import os
-Entrez.email = "karsten.leonhardt@posteo.de"
+Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
 
 # decide whether to load mesh df with (=1) or without (=0) SCFs
 include_SCR = 0
@@ -17,6 +17,9 @@ basedir = os.path.dirname(os.path.dirname(cdir))
 
 dir_data_in = basedir+"/data/interim/"
 dir_data_out = basedir+"/data/final/"
+
+if not os.path.exists(dir_data_out):
+    os.mkdirs(dir_data_out)
 
 def import_df_records():
     fname = "records.pkl"
