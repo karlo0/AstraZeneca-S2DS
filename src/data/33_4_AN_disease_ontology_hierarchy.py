@@ -12,18 +12,47 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS
 
-id_name_tree_df = pd.read_pickle('../../data/final/mesh.pkl') # read the mesh database pkl file
-# takes a meshid from a dataframe and converts it into tree numbers
+mesh_df = pd.read_pickle('../../data/final/mesh.pkl') # read the mesh database pkl file
+
 def convert_meshid_to_tree_numbers(mesh_id):
-    row_indexes = id_name_tree_df.index[id_name_tree_df['mesh_id'] == mesh_id].tolist()
-    # append the tree numbers to a list
-    tree_numbers = []
+    """
+    converts any mesh_id to all its tree numbers using the mesh database (mesh.pkl)
+    str -> list
+    Examples:        
+        >>> convert_meshid_to_tree_numbers('D000013')
+        >>> ['C16.131']
+        
+        >>> convert_meshid_to_tree_numbers('D000001')
+        >>> ['D03.633.100.221.173']
+        
+        >>> convert_meshid_to_tree_numbers('D000002')
+        >>> ['D02.705.400.625.800', 'D02.705.539.345.800', 'D02.886.300.692.800']
+              
+        >>> convert_meshid_to_tree_numbers('D000012')
+        >>> ['C16.320.565.398.500.440.500', 'C18.452.584.500.875.440.500', 'C18.452.648.398.500.440.500']
+        
+        >>> convert_meshid_to_tree_numbers('D000016')
+        >>> ['C16.131.080', 'C26.733.031', 'G01.750.748.500.031', 'N06.850.460.350.850.500.031', 'N06.850.810.300.360.031']
+
+        >>> convert_meshid_to_tree_numbers('D0000020')
+        >>> []
+        
+        >>> convert_meshid_to_tree_numbers('A0000020')
+        >>> []
+    """
+    # get the row indexes for the mesh id
+    row_indexes = mesh_df.index[mesh_df['mesh_id'] == mesh_id].tolist()    
+    tree_numbers = [] # initialize a list to append the tree numbers
     for row_index in row_indexes:
-        tree_num = id_name_tree_df.loc[row_index,'mesh_treenumbers']
+        tree_num = mesh_df.loc[row_index,'mesh_treenumbers']
         tree_numbers.append(tree_num)
     return tree_numbers
 
 def convert_treenumber_to_tree_hierarchy(tree_number):
+    """
+    takes a treenumber and converts it into parent tree hierarchy
+    output is a 
+    """
     all_parents = [];
     for i in range(0,len(tree_number), 4):
         all_parents.append((tree_number[0:i+3]))
@@ -33,12 +62,12 @@ def convert_treenumber_to_tree_hierarchy(tree_number):
         hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
 
-## initialize dictionary for storing disease counts
-#id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
-#new_dict = {}
-#for item in id_name_tree_df_temp.mesh_heading:
-#    new_dict[item] = 0
-#
+# initialize dictionary for storing disease counts
+id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
+new_dict = {}
+for item in id_name_tree_df_temp.mesh_heading:
+    new_dict[item] = 0
+
 ## count the entries
 #pmid_df = pd.read_pickle('../../data/final/geo.pkl')
 ##for row_index in range(0,len(pmid_df['mesh_id'])):
@@ -67,8 +96,7 @@ def convert_treenumber_to_tree_hierarchy(tree_number):
 #from collections import Counter
 #print(Counter(new_dict).most_common(15))
        
-    
-
+"""
 # * = * = * = * = * = # code for Luis' graph  = * = * = * = * = * = * = * = * = #
 
 # objective is to produce csv file with column1 = disease_tree_id and column2 = parent_tree_id
@@ -88,7 +116,7 @@ for row_index, row in disease_id_name_tree_df.iterrows():
     all_tree_numbers = convert_meshid_to_tree_numbers(disease_id_name_tree_df.loc[row_index,'mesh_id'])        
     # iterate over the tree_numbers
     for tree_number in all_tree_numbers:
-        if tree_number[0] == 'C':
+        if tree_number[0] == 'C': # additional check to ensure only diseases are selected
             parent_tree_number = tree_number[0:-4] # select parent tree number       
             all_records.append([tree_number, parent_tree_number]) # append to record
 
@@ -111,9 +139,9 @@ csv_file = "disease_parent.csv"
 
 WriteListToCSV(csv_file,csv_columns,csv_data_list)
 
+"""
 
-
-
+"""
 
 # * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = #
 # * = * = * = * = * = * = * = * Archives * = * = * = * = * = * = * = * = * = #
@@ -149,3 +177,5 @@ WriteListToCSV(csv_file,csv_columns,csv_data_list)
 #(value, index, disease_name, disease_hierarchy) = match_mesh_disease_id_to_disease_hierarchy(ctd_diseases_df, 'D003928')
 #
 #print(disease_hierarchy)
+
+"""
