@@ -12,10 +12,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS
 
-# read the mesh database pkl file
-id_name_tree_df = pd.read_pickle('../../data/final/id_name_tree_without_SCR.pkl')
-
-# takes a meshid and converts it into tree numbers
+id_name_tree_df = pd.read_pickle('../../data/final/mesh.pkl') # read the mesh database pkl file
+# takes a meshid from a dataframe and converts it into tree numbers
 def convert_meshid_to_tree_numbers(mesh_id):
     row_indexes = id_name_tree_df.index[id_name_tree_df['mesh_id'] == mesh_id].tolist()
     # append the tree numbers to a list
@@ -28,40 +26,79 @@ def convert_meshid_to_tree_numbers(mesh_id):
 def convert_treenumber_to_tree_hierarchy(tree_number):
     all_parents = [];
     for i in range(0,len(tree_number), 4):
-        all_parents.append((tree_number[0:i+3]))        
+        all_parents.append((tree_number[0:i+3]))
     hierarchy_list = [];
     for parent in all_parents:                               
         row_index = id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == parent].values[0]
         hierarchy_list.append(id_name_tree_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
- 
-pmid_df = pd.read_pickle('../../data/final/geo_id_mesh_from_pmid.pkl')
 
-id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
+# code for luis' graph
+# objective is to produce csv file with column1 = mesh_id and column2 = parent
+# read input geo data
+pmid_df = pd.read_pickle('../../data/final/geo.pkl')
+disease_pmid_df = pmid_df[pmid_df.category=='C'] # select only diseases
+## set up disease vocabulary subset df of main mesh df
+#disease_id_name_tree_df = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
 
-new_dict = {}
-for item in id_name_tree_df_temp.mesh_heading:
-    new_dict[item] = 0
+# initialize
+all_parents = []
+all_diseases = []
+partial_disease_pmid_df = disease_pmid_df.iloc[0:3,] # only for testing
+# go through the entire input data
+for row_index, row in partial_disease_pmid_df.iterrows():
+#for row_index, row in disease_pmid_df.iterrows():
+    # find all tree numbers corresonding to the mesh_id for that row
+    # (each mesh_id may often have multiple tree numbers)
+    all_tree_numbers = convert_meshid_to_tree_numbers(disease_pmid_df.loc[row_index,'mesh_id'])    
+    print(all_tree_numbers)
+    # iterate over the tree_numbers
+    for tree_number in all_tree_numbers:        
+        parent_tree_number = tree_number[0:-4] # select parent tree id
+        # find the mesh row in the vocab df for that parent tree number
+        mesh_row_index = id_name_tree_df.index[id_name_tree_df['mesh_treenumbers'] == parent_tree_number].values[0]
+        # find the parent 
+        parent = (id_name_tree_df.loc[row_index,'mesh_id'])
+        all_diseases.append(disease_pmid_df.loc[row_index,'mesh_id'])
+        all_parents.append(parent)
 
-count = 0
-for row_index in range(0,len(pmid_df['mesh_uis'])):
-#for row_index in range(0,100):
-#for row_index in range(0,1):
-    all_ids_row_index = pmid_df.loc[row_index,'mesh_uis']        
-    all_hierarchies = []
-    for id_row_index in all_ids_row_index:        
-        tree_numbers_id = convert_meshid_to_tree_numbers(id_row_index)        
-        for tree_number in tree_numbers_id:            
-            if tree_number[0] == 'C':
-                hierarchy = convert_treenumber_to_tree_hierarchy(tree_number)                               
 
-                if not hierarchy[0].startswith('Pathological'):
-                    count+=1
-                    for item in hierarchy:
-                        all_hierarchies.append(item)
-                        s = set(all_hierarchies)
-    for item in s:
-        new_dict[item] = new_dict[item] + 1
+print(all_diseases)
+print(all_parents)
+
+## initialize dictionary for storing disease counts
+#id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
+#new_dict = {}
+#for item in id_name_tree_df_temp.mesh_heading:
+#    new_dict[item] = 0
+#
+## count the entries
+#pmid_df = pd.read_pickle('../../data/final/geo.pkl')
+##for row_index in range(0,len(pmid_df['mesh_id'])):
+##for row_index in range(0,10000):
+#for row_index in range(0,200):
+#    all_ids_row_index = pmid_df.loc[row_index,'mesh_id']        
+#    all_hierarchies = []
+#    for id_row_index in all_ids_row_index:        
+#        tree_numbers_id = convert_meshid_to_tree_numbers(id_row_index)
+##        print(tree_numbers_id)
+#        for tree_number in tree_numbers_id:            
+#            if tree_number[0] == 'C':
+#                hierarchy = convert_treenumber_to_tree_hierarchy(tree_number)
+##                print(hierarchy)
+#                if not hierarchy[0].startswith('Pathological'):                    
+#                    for item in hierarchy:
+#                        all_hierarchies.append(item)
+#                        s = set(all_hierarchies)
+#                        print(s)
+#                        for item in s:
+#                            new_dict[item] = new_dict[item] + 1
+#        
+#        
+# 
+##max(A, key=A.get)
+#from collections import Counter
+#print(Counter(new_dict).most_common(15))
 
 # * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = #
 # * = * = * = * = * = * = * = * Archives * = * = * = * = * = * = * = * = * = #
@@ -97,10 +134,3 @@ for row_index in range(0,len(pmid_df['mesh_uis'])):
 #(value, index, disease_name, disease_hierarchy) = match_mesh_disease_id_to_disease_hierarchy(ctd_diseases_df, 'D003928')
 #
 #print(disease_hierarchy)
-
-
-
-
-
-
-
