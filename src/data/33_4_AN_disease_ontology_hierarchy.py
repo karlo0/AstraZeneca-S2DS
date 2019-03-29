@@ -85,39 +85,65 @@ def convert_treenumber_to_parent_tree_hierarchy(tree_number):
         hierarchy_list.append(mesh_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
 
-## initialize dictionary for storing disease counts
-#id_name_tree_df_temp = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
-#new_dict = {}
-#for item in id_name_tree_df_temp.mesh_heading:
-#    new_dict[item] = 0
+# initialize dictionary for storing disease counts
+# note: use entire mesh database so that diseases not studied get count of 0
+mesh_diseases_df = mesh_df[mesh_df.category=='C'] # only disease category
+disease_count = {}
+for item in mesh_diseases_df.mesh_heading:
+    disease_count[item] = 0
 
-## count the entries
-#pmid_df = pd.read_pickle('../../data/final/geo.pkl')
-##for row_index in range(0,len(pmid_df['mesh_id'])):
-##for row_index in range(0,10000):
-#for row_index in range(0,200):
-#    all_ids_row_index = pmid_df.loc[row_index,'mesh_id']        
-#    all_hierarchies = []
-#    for id_row_index in all_ids_row_index:        
-#        tree_numbers_id = convert_meshid_to_tree_numbers(id_row_index)
-##        print(tree_numbers_id)
-#        for tree_number in tree_numbers_id:            
-#            if tree_number[0] == 'C':
-#                hierarchy = convert_treenumber_to_tree_hierarchy(tree_number)
-##                print(hierarchy)
-#                if not hierarchy[0].startswith('Pathological'):                    
-#                    for item in hierarchy:
-#                        all_hierarchies.append(item)
-#                        s = set(all_hierarchies)
-#                        print(s)
-#                        for item in s:
-#                            new_dict[item] = new_dict[item] + 1
-#        
-#        
-# 
-##max(A, key=A.get)
-#from collections import Counter
-#print(Counter(new_dict).most_common(15))
+# read the input database
+geo_df = pd.read_pickle('../../data/final/geo.pkl')
+# note: one study, given by the geo_id, has multiple mesh_ids that correspond to 
+# multiple categories like anatomy (A), diseases (C), chemicals and drugs (D), etc.
+geo_diseases_df = geo_df[geo_df.category=='C'] # only disease category
+# note: even after restricting to just the disease category, one study has multiple mesh_ids 
+# because a study may be relevant to multiple diseases and therefore multiple trees
+
+# make a unique dataframe in order to iterate the data while counting (see below)
+unique_geo_diseases_df = geo_diseases_df.drop_duplicates(subset='geo_id')
+
+# note: all the commented print commands were used to debug
+counter = 0 # to check progress
+for row_index, row in unique_geo_diseases_df.iterrows():    
+    print(counter)
+    unique_geo_id = unique_geo_diseases_df.loc[row_index,'geo_id']
+#    print('\n', row_index, 'geo_id:', unique_geo_id)
+    
+    all_mesh_ids_row_index = geo_diseases_df.mesh_id[geo_diseases_df.geo_id==unique_geo_id]
+#    print('mesh_ids for study given by geo_id:', unique_geo_id, '\n', all_mesh_ids_row_index)
+    
+    all_diseases_geo_id = [] # all diseases studied by the geo_id
+    # associate each mesh_id with all its tree_numbers
+    for mesh_id in all_mesh_ids_row_index:
+        all_tree_numbers_mesh_id = convert_meshid_to_tree_numbers(mesh_id)
+        # note: each mesh-id may have multiple tree numbers!
+#        print('all tree numbers for mesh_id', mesh_id, '\n', all_tree_numbers_mesh_id)   
+        # for each tree number, find all its parents
+        for tree_number in all_tree_numbers_mesh_id: 
+            if tree_number[0] == 'C': # exclude non-diseases (a second check)
+                all_parents_disease = convert_treenumber_to_parent_tree_hierarchy(tree_number)
+#                print('all parents for tree number', tree_number, '\n', all_parents_disease)
+                # dont consider trees whose top level is 'Pathological'
+                if not all_parents_disease[0].startswith('Pathological'):     
+                    all_diseases_geo_id.extend(all_parents_disease)
+
+#    print(all_diseases_geo_id)
+    unique_diseases_geo_id = set(all_diseases_geo_id)
+#    print(unique_diseases_geo_id)
+    for disease in unique_diseases_geo_id:
+        disease_count[disease] = disease_count[disease] + 1
+    counter+= 1
+#    if counter >= 2:
+#        break
+
+#print(all_diseases_geo_id)
+#print(s)
+ 
+print(max(disease_count, key=disease_count.get))
+from collections import Counter
+print(Counter(disease_count).most_common(15))
+
        
 """
 # * = * = * = * = * = # code for Luis' graph  = * = * = * = * = * = * = * = * = #
