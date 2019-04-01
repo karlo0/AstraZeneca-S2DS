@@ -134,8 +134,6 @@ for row_index, row in unique_geo_diseases_df.iterrows():
     for disease in unique_diseases_geo_id:
         disease_count[disease] = disease_count[disease] + 1
     counter+= 1
-#    if counter >= 2:
-#        break
 
 #print(all_diseases_geo_id)
 #print(s)
@@ -144,10 +142,94 @@ print(max(disease_count, key=disease_count.get))
 from collections import Counter
 print(Counter(disease_count).most_common(15))
 
+all_disease_names = list(disease_count.keys())
+all_disease_counts = list(disease_count.values())
+
+convert_to_csv_df = pd.DataFrame({"disease_name": all_disease_names, "disease_counts": all_disease_counts})
+convert_to_csv_df.to_csv("disease_name_count.csv", index=False)
+
+
+# illustrate with a histogram
+all_top_hierarchy_disease_counts = {
+                                    'Bacterial Infections and Mycoses': 1198, 
+                                    'Virus Diseases': 2098,
+                                    'Parasitic Diseases': 191,
+                                    'Neoplasms': 26085,
+                                    'Musculoskeletal Diseases': 1660,
+                                    'Digestive System Diseases': 4784,
+                                    'Stomatognathic Diseases': 661,
+                                    'Respiratory Tract Diseases': 2417,
+                                    'Otorhinolaryngologic Diseases': 328,
+                                    'Nervous System Diseases': 5282,
+                                    'Eye Diseases': 847,
+                                    'Male Urogenital Diseases': 2789,
+                                    'Female Urogenital Diseases and Pregnancy Complications': 2867,
+                                    'Hemic and Lymphatic Diseases': 4447,
+                                    'Congenital, Hereditary, and Neonatal Diseases and Abnormalities': 3632,
+                                    'Skin and Connective Tissue Diseases': 5551,
+                                    'Nutritional and Metabolic Diseases': 2275,
+                                    'Endocrine System Diseases': 2622,
+                                    'Immune System Diseases': 5511,
+                                    'Disorders of Environmental Origin': 2,
+                                    'Animal Diseases': 982,
+                                    'Pathological Conditions, Signs and Symptoms': 0,
+                                    'Occupational Diseases': 59,
+                                    'Chemically-Induced Disorders': 307,
+                                    'Wounds and Injuries': 308
+                                   }
+
+print(Counter(all_top_hierarchy_disease_counts).most_common(25))
+
+top_diseases = {'Neoplasms': 26085, 
+                'Skin and Connective Tissue Diseases': 5551, 
+                'Immune System Diseases': 5511, 
+                'Nervous System Diseases': 5282, 
+                'Skin Diseases': 4978, 
+                'Digestive System Diseases': 4784, 
+                'Hemic and Lymphatic Diseases': 4447, 
+                'Carcinoma': 3992,                                
+                'Others (16)': 3632+2867+2789+2622+2417+2275+2098+1660+1198+982+847+661+328+308+307+191+59+2
+                }
+                
+#                'Respiratory Tract Diseases', 2417), ('Nutritional and Metabolic Diseases', 2275), ('Virus Diseases', 2098), ('Musculoskeletal Diseases', 1660), ('Bacterial Infections and Mycoses', 1198)
+
+top_disease_names = list(top_diseases.keys())
+top_disease_counts = list(top_diseases.values())
+
+#labels = ['Cookies', 'Jellybean', 'Milkshake', 'Cheesecake']
+#sizes = [38.4, 40.6, 20.7, 10.3]
+#colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
+#patches = plt.pie(top_disease_counts,  autopct='%1.1f%%')
+#plt.legend(patches, top_disease_names, loc="best")
+#plt.axis('equal')
+#plt.tight_layout()
+#plt.show()
+
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+labels = top_disease_names
+values = top_disease_counts
+
+trace = go.Pie(labels=labels, values=values)
+
+py.iplot([trace], filename='basic_pie_chart')
+
+
+plt.bar(top_disease_names, top_disease_counts, color='g')
+plt.legend(top_disease_names,loc=2)
+plt.show()
+
+sum(all_disease_counts)
        
 """
 # * = * = * = * = * = # code for Luis' graph  = * = * = * = * = * = * = * = * = #
 
+import csv
+import os
+
+# [1] Part 1
 # objective is to produce csv file with column1 = disease_tree_id and column2 = parent_tree_id
 # for entire database
 #pmid_df = pd.read_pickle('../../data/final/geo.pkl')
@@ -169,8 +251,43 @@ for row_index, row in disease_id_name_tree_df.iterrows():
             parent_tree_number = tree_number[0:-4] # select parent tree number       
             all_records.append([tree_number, parent_tree_number]) # append to record
 
-import csv
-import os
+"""            
+# [2] Part 2
+      
+# objective is to produce csv file with col1 = 'Tree_id', col2='Mesh headings', col3='Counts'
+
+disease_count = {}
+with open('disease_name_count.csv', 'r') as csvfile:
+    readCSV = csv.reader(csvfile)
+    disease_mesh_heading = []    
+    for row in readCSV:
+        disease_count[row[0]]=row[1]
+#        disease_mesh_heading.append(row[0])
+#        disease_count.append(rowp[1])
+        
+
+#print your_list
+all_records_2 = []
+tree_numbers = []
+mesh_headings_list = []
+disease_counts = []
+for row_index, row in mesh_diseases_df.iterrows():
+#    print(row_index)
+    tree_number = (mesh_diseases_df.loc[row_index,'mesh_treenumbers'])
+    mesh_heading = (mesh_diseases_df.loc[row_index,'mesh_heading'])
+    disease_counts = (disease_count[mesh_diseases_df.loc[row_index,'mesh_heading']])
+    all_records_2.append([tree_number, mesh_heading, disease_counts])
+    
+    
+csv_columns = ['Diease_TreeNumber','Disease_Mesh_Heading', 'Disease_Count']
+csv_data_list = all_records_2
+
+currentPath = os.getcwd()
+csv_file = "disease_tree_heading_count.csv"
+
+WriteListToCSV(csv_file,csv_columns,csv_data_list)
+
+
 
 def WriteListToCSV(csv_file,csv_columns,data_list):    
     with open(csv_file, 'w') as csvfile:
