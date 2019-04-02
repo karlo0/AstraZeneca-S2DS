@@ -5,12 +5,18 @@ Begun on Wed Mar 18 14:30:13 2019
 
 @author: nLp ATTACK
 
+gives a count of the diseases mentioned as mesh ids in the geoseries data for 
+homo sapiens, extracted and saved in geo.pkl
+
+uses mesh hierarchy as given in https://meshb.nlm.nih.gov/treeView, which was 
+extracted and saved in mesh.pkl
+
+the count is obtained and saved as a pkl file 'disease_mesh_heading_count.pkl'
+that consists of a pandas dataframe 'diseases_count_df' with two columns:
+    'disease_mesh_heading', 'disease_count'
+
 """
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-from wordcloud import WordCloud, STOPWORDS
 
 mesh_df = pd.read_pickle('../../data/final/mesh.pkl') # read the mesh database pkl file
 
@@ -135,179 +141,10 @@ for row_index, row in unique_geo_diseases_df.iterrows():
         disease_count[disease] = disease_count[disease] + 1
     counter+= 1
 
-#print(all_diseases_geo_id)
-#print(s)
- 
-print(max(disease_count, key=disease_count.get))
-from collections import Counter
-print(Counter(disease_count).most_common(15))
+diseases_count_df = pd.DataFrame(disease_count.items())
+diseases_count_df = pd.DataFrame(disease_count.items(), columns = ['disease_mesh_heading', 'disease_count'])
+diseases_count_df.to_pickle('../../data/processed/disease_mesh_heading_count.pkl')
 
-all_disease_names = list(disease_count.keys())
-all_disease_counts = list(disease_count.values())
-
-convert_to_csv_df = pd.DataFrame({"disease_name": all_disease_names, "disease_counts": all_disease_counts})
-convert_to_csv_df.to_csv("disease_name_count.csv", index=False)
-
-
-# illustrate with a histogram
-all_top_hierarchy_disease_counts = {
-                                    'Bacterial Infections and Mycoses': 1198, 
-                                    'Virus Diseases': 2098,
-                                    'Parasitic Diseases': 191,
-                                    'Neoplasms': 26085,
-                                    'Musculoskeletal Diseases': 1660,
-                                    'Digestive System Diseases': 4784,
-                                    'Stomatognathic Diseases': 661,
-                                    'Respiratory Tract Diseases': 2417,
-                                    'Otorhinolaryngologic Diseases': 328,
-                                    'Nervous System Diseases': 5282,
-                                    'Eye Diseases': 847,
-                                    'Male Urogenital Diseases': 2789,
-                                    'Female Urogenital Diseases and Pregnancy Complications': 2867,
-                                    'Hemic and Lymphatic Diseases': 4447,
-                                    'Congenital, Hereditary, and Neonatal Diseases and Abnormalities': 3632,
-                                    'Skin and Connective Tissue Diseases': 5551,
-                                    'Nutritional and Metabolic Diseases': 2275,
-                                    'Endocrine System Diseases': 2622,
-                                    'Immune System Diseases': 5511,
-                                    'Disorders of Environmental Origin': 2,
-                                    'Animal Diseases': 982,
-                                    'Pathological Conditions, Signs and Symptoms': 0,
-                                    'Occupational Diseases': 59,
-                                    'Chemically-Induced Disorders': 307,
-                                    'Wounds and Injuries': 308
-                                   }
-
-print(Counter(all_top_hierarchy_disease_counts).most_common(25))
-
-top_diseases = {'Neoplasms': 26085, 
-                'Skin and Connective Tissue Diseases': 5551, 
-                'Immune System Diseases': 5511, 
-                'Nervous System Diseases': 5282, 
-                'Skin Diseases': 4978, 
-                'Digestive System Diseases': 4784, 
-                'Hemic and Lymphatic Diseases': 4447, 
-                'Carcinoma': 3992,                                
-                'Others (16)': 3632+2867+2789+2622+2417+2275+2098+1660+1198+982+847+661+328+308+307+191+59+2
-                }
-                
-#                'Respiratory Tract Diseases', 2417), ('Nutritional and Metabolic Diseases', 2275), ('Virus Diseases', 2098), ('Musculoskeletal Diseases', 1660), ('Bacterial Infections and Mycoses', 1198)
-
-top_disease_names = list(top_diseases.keys())
-top_disease_counts = list(top_diseases.values())
-
-#labels = ['Cookies', 'Jellybean', 'Milkshake', 'Cheesecake']
-#sizes = [38.4, 40.6, 20.7, 10.3]
-#colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
-#patches = plt.pie(top_disease_counts,  autopct='%1.1f%%')
-#plt.legend(patches, top_disease_names, loc="best")
-#plt.axis('equal')
-#plt.tight_layout()
-#plt.show()
-
-import plotly
-import plotly.plotly as py
-import plotly.graph_objs as go
-
-labels = top_disease_names
-values = top_disease_counts
-
-trace = go.Pie(labels=labels, values=values)
-
-py.iplot([trace], filename='basic_pie_chart')
-
-
-plt.bar(top_disease_names, top_disease_counts, color='g')
-plt.legend(top_disease_names,loc=2)
-plt.show()
-
-sum(all_disease_counts)
-       
-"""
-# * = * = * = * = * = # code for Luis' graph  = * = * = * = * = * = * = * = * = #
-
-import csv
-import os
-
-# [1] Part 1
-# objective is to produce csv file with column1 = disease_tree_id and column2 = parent_tree_id
-# for entire database
-#pmid_df = pd.read_pickle('../../data/final/geo.pkl')
-#disease_pmid_df = pmid_df[pmid_df.category=='C'] # select only diseases
-## set up disease vocabulary subset df of main mesh df
-disease_id_name_tree_df = id_name_tree_df[id_name_tree_df.category=='C'] # only disease category
-
-# initialize
-all_records = []
-#disease_id_name_tree_df = disease_id_name_tree_df.iloc[0:3,] # only for testing
-# go through the entire input data
-for row_index, row in disease_id_name_tree_df.iterrows():
-    # find all tree numbers corresonding to the mesh_id for that row
-    # (each mesh_id may often have multiple tree numbers)
-    all_tree_numbers = convert_meshid_to_tree_numbers(disease_id_name_tree_df.loc[row_index,'mesh_id'])        
-    # iterate over the tree_numbers
-    for tree_number in all_tree_numbers:
-        if tree_number[0] == 'C': # additional check to ensure only diseases are selected
-            parent_tree_number = tree_number[0:-4] # select parent tree number       
-            all_records.append([tree_number, parent_tree_number]) # append to record
-
-"""            
-# [2] Part 2
-      
-# objective is to produce csv file with col1 = 'Tree_id', col2='Mesh headings', col3='Counts'
-
-disease_count = {}
-with open('disease_name_count.csv', 'r') as csvfile:
-    readCSV = csv.reader(csvfile)
-    disease_mesh_heading = []    
-    for row in readCSV:
-        disease_count[row[0]]=row[1]
-#        disease_mesh_heading.append(row[0])
-#        disease_count.append(rowp[1])
-        
-
-#print your_list
-all_records_2 = []
-tree_numbers = []
-mesh_headings_list = []
-disease_counts = []
-for row_index, row in mesh_diseases_df.iterrows():
-#    print(row_index)
-    tree_number = (mesh_diseases_df.loc[row_index,'mesh_treenumbers'])
-    mesh_heading = (mesh_diseases_df.loc[row_index,'mesh_heading'])
-    disease_counts = (disease_count[mesh_diseases_df.loc[row_index,'mesh_heading']])
-    all_records_2.append([tree_number, mesh_heading, disease_counts])
-    
-    
-csv_columns = ['Diease_TreeNumber','Disease_Mesh_Heading', 'Disease_Count']
-csv_data_list = all_records_2
-
-currentPath = os.getcwd()
-csv_file = "disease_tree_heading_count.csv"
-
-WriteListToCSV(csv_file,csv_columns,csv_data_list)
-
-
-
-def WriteListToCSV(csv_file,csv_columns,data_list):    
-    with open(csv_file, 'w') as csvfile:
-        writer = csv.writer(csvfile, dialect='excel', quoting=csv.QUOTE_NONNUMERIC)
-        writer.writerow(csv_columns)
-        for data in data_list:
-            writer.writerow(data)    
-    return            
-
-csv_columns = ['Diease_TreeNumber','Parent_TreeNumber']
-csv_data_list = all_records
-
-currentPath = os.getcwd()
-csv_file = "disease_parent.csv"
-
-WriteListToCSV(csv_file,csv_columns,csv_data_list)
-
-"""
-
-"""
 
 # * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = #
 # * = * = * = * = * = * = * = * Archives * = * = * = * = * = * = * = * = * = #
@@ -343,5 +180,3 @@ WriteListToCSV(csv_file,csv_columns,csv_data_list)
 #(value, index, disease_name, disease_hierarchy) = match_mesh_disease_id_to_disease_hierarchy(ctd_diseases_df, 'D003928')
 #
 #print(disease_hierarchy)
-
-"""
