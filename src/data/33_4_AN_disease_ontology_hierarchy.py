@@ -15,11 +15,24 @@ the count is obtained and saved as a pkl file 'disease_mesh_heading_count.pkl'
 that consists of a pandas dataframe 'diseases_count_df' with two columns:
     'disease_mesh_heading', 'disease_count'
 
+the counting algorithm is as follows:    
+(1) geo.pkl is the input and mesh.pkl is the input vocablary
+(2) write two functions to
+    (1) convert any mesh_id to all its tree numbers using mesh.pkl
+    (2) take a treenumber and convert it into its parent tree hierarchy of mesh_headings.
+(3) iterate over every study in geo.pkl
+    (1) find all the mesh-ids of the study (e.g., male breast cancer C02.001.001)
+    (2) for each mesh-id, find its tree ids and parents (e.g., breast cancer = C02.001 and cancer = C02)
+    (3) collect all the parents for all mesh-ids and make the set of parents unique
+    (4) update counts for parents and the disease (e.g., male breast cancer, breast cancer, and cancer)    
+(4) collect the counts and export
 """
 import pandas as pd
 
-mesh_df = pd.read_pickle('../../data/final/mesh.pkl') # read the mesh database pkl file
+# read the mesh database pkl file
+mesh_df = pd.read_pickle('../../data/final/mesh.pkl')
 
+## define two required functions
 def convert_meshid_to_tree_numbers(mesh_id):
     """
     converts any mesh_id to all its tree numbers using the mesh database (mesh.pkl)
@@ -91,6 +104,8 @@ def convert_treenumber_to_parent_tree_hierarchy(tree_number):
         hierarchy_list.append(mesh_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
 
+## start the counting
+    
 # initialize dictionary for storing disease counts
 # note: use entire mesh database so that diseases not studied get count of 0
 mesh_diseases_df = mesh_df[mesh_df.category=='C'] # only disease category
@@ -139,7 +154,7 @@ for row_index, row in unique_geo_diseases_df.iterrows():
 #    print(unique_diseases_geo_id)
     for disease in unique_diseases_geo_id:
         disease_count[disease] = disease_count[disease] + 1
-    counter+= 1
+    counter+= 1    
 
 diseases_count_df = pd.DataFrame(disease_count.items())
 diseases_count_df = pd.DataFrame(disease_count.items(), columns = ['disease_mesh_heading', 'disease_count'])
