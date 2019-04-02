@@ -7,8 +7,8 @@ import pandas as pd
 import networkx as nx
 
 # Paths for input geo and mesh files
-GEO_PATH = 'mesh_geo/geo.pkl'
-MESH_PATH = 'mesh_geo/mesh.pkl'
+GEO_PATH = '../../data/final/geo.pkl'
+MESH_PATH = '../../data/final/mesh.pkl'
 
 # Paths for output Gephi files
 GEPHI_NODES = 'Gephi_Disease_Nodes.csv'
