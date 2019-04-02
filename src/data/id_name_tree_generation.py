@@ -25,18 +25,18 @@ The SCRs have their own unique identifiers UIs as well
 
 How can we deal with SCR?
 These new concepts might be tags of Karsten's PMID data for example
-We can map the new record names NMs to existing MeSH ids (UIs and tree IDs) 
+We can map the new record names NMs to existing MeSH ids (UIs and tree IDs)
 -- this is the only way of linking this data with the tree. Then we search SCRs as if they were mesh headings
-result: in our use case, we can search the tags for disease names, including SCR names 
-
+result: in our use case, we can search the tags for disease names, including SCR names
 """
 
 
-# version 33_3_AZ
+print("\n## download mesh ids and its corresponding mesh headings and put it into the BASE/data/final/mesh.pkl dataframe ##\n")
 
 import pandas as pd
 import pickle
 import numpy as np
+import urllib.request
 import os
 
 # define 
@@ -52,10 +52,27 @@ cdir = os.path.dirname(os.path.realpath(__file__))
 # basedir = root dir of the repository
 basedir = os.path.dirname(os.path.dirname(cdir))
 
+dir_data_in = basedir+"/data/external/"
 dir_data_out = basedir+"/data/final/"
 
-if os.path.isdir(dir_data_out)!=1:
-    os.mkdir(dir_data_out)
+if not os.path.exists(dir_data_out):
+    os.makedirs(dir_data_out)
+
+if not os.path.exists(dir_data_in):
+    os.makedirs(dir_data_in)
+
+def fetch_mesh_remotely():
+    files = ['d2019.bin', 'c2019.bin']
+    for f in files:
+        try:
+            fh = open(dir_data_in+f,'r')
+            fh.close
+        except FileNotFoundError:
+            url = 'ftp://nlmpubs.nlm.nih.gov/online/mesh/MESH_FILES/asciimesh/'+f
+            urllib.request.urlretrieve(url, dir_data_in+f)
+
+
+fetch_mesh_remotely()
 
 # initialize
 tree_value = []
@@ -63,7 +80,7 @@ name_list = []
 tree_number_list = []
 id_list = []
 
-with open(basedir+'/data/external/d2019.txt') as f:
+with open(dir_data_in+'d2019.bin') as f:
     for line in f: # cycle through each line
         
         if line.startswith('MH = '): # name
@@ -84,8 +101,10 @@ with open(basedir+'/data/external/d2019.txt') as f:
 df = pd.DataFrame.from_dict({'mesh_id':pd.Series(id_list),'mesh_heading':pd.Series(name_list), 'mesh_treenumbers':pd.Series(tree_number_list)})     
 
 no_tree_number_df = df[df.mesh_treenumbers.str.len()==0]
-no_tree_number_df['mesh_treenumbers'] = np.nan
-no_tree_number_df['category'] = 'Sex'
+
+no_tree_number_df.loc[:, 'mesh_treenumbers'] = pd.Series(np.array(len(no_tree_number_df)*[np.nan]), index=no_tree_number_df.index)
+
+no_tree_number_df.loc[:, 'category'] = pd.Series(len(no_tree_number_df)*['Sex'], index=no_tree_number_df.index)
 
 # expand list into columns
 tags = df.mesh_treenumbers.apply(pd.Series)
@@ -106,7 +125,7 @@ if include_SCR ==1:
     maps_to_list = []
     id_list = []
 
-    with open(basedir+'/data/external/c2019.txt') as f:
+    with open(dir_data_in+'c2019.bin') as f:
         for line in f: # cycle through each line
 
             if line.startswith('NM = '): # new name
@@ -152,8 +171,8 @@ if include_SCR ==1:
 
     df['scr'] = 0
 
-    df = pd.concat([df, scr_df], ignore_index=True)
+    df = pd.concat([df, scr_df], ignore_index=True, sort = False)
 
-df = pd.concat([df, no_tree_number_df], ignore_index=True)
+df = pd.concat([df, no_tree_number_df], ignore_index=True, sort = False)
 
 df.to_pickle(os.path.join(dir_data_out,output_file))

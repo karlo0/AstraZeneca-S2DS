@@ -10,6 +10,8 @@ except ImportError:
     from urllib2 import HTTPError  # for Python 2
 # retmax = maximum number of retrieved series
 
+print("\n## Fetching raw data ##\n")
+
 
 ## Set paths
 # cdir = dir of this script
@@ -18,10 +20,11 @@ cdir = os.path.dirname(os.path.realpath(__file__))
 basedir = os.path.dirname(os.path.dirname(cdir))
 
 dir_data_out = basedir+"/data/raw/geo_data/"
+
 if not os.path.exists(dir_data_out):
     os.makedirs(dir_data_out)
 
-filenamebase="all_gse_series_homo_sapiens"
+filenamebase="all_gse_series_raw"
 
 # use_small_number_of_series = True when only a small number of series shall be extracted. The number of series is specified by small_number_of_series
 use_small_number_of_series = False
@@ -37,7 +40,7 @@ else:
     batch_size = 5000
     use_hist_val = 'y'
 
-search_term = input("Input search terms that shall be contained in the desired geo DataSets. Please look at\nhttps://www.ncbi.nlm.nih.gov/geo/info/qqtutorial.html\nfor all possibilities. To construct a complex query, specify the search terms, their fields, and the Boolean operations to perform on the terms using the following syntax:\nterm [field] OPERATOR term [field]\nwhere term is the search terms, field is the search field, and OPERATOR is the Boolean operator ('AND', 'OR', 'NOT') which must be capitalized. When you press enter without giving a string expression for the query the following standard query is performed,\nGSE[ETYP] AND Homo[Organism]\nwhich retrieves all geo series with studies performed for/on humans."
+search_term = input("Input search terms that shall be contained in the desired geo DataSets.\nPlease look at\n\nhttps://www.ncbi.nlm.nih.gov/geo/info/qqtutorial.html\n\nfor all possibilities. To construct a complex query, specify the search terms,\ntheir fields, and the Boolean operations to perform on the terms using the following syntax:\n\nterm [field] OPERATOR term [field]\n\nwhere term is the search term, field is the search field, and OPERATOR is the\nBoolean operator ('AND', 'OR', 'NOT') which must be capitalized.\nWhen you press enter without giving a string expression for the query, the following standard query is performed,\n\nGSE[ETYP] AND Homo[Organism]\n\nwhich retrieves all geo series with studies performed for/on humans.\n\nThe following list shows the most used terms for field=Organism:\n1. Homo sapiens (human)\n2. Mus musculus (house mouse)\n3. Rattus norvegicus (brown rat)\n4. Macaca mulatta (rhesus macaque)\n5. Drosophila melanogaster (common fruit fly)\n\nInput: ")
 
 if(len(search_term) == 0):
     search_term = "GSE[ETYP] AND Homo[Organism]"
@@ -46,28 +49,41 @@ else:
     handle = Entrez.esearch(db="gds", term=search_term, retmax=small_number_of_series, usehistory=use_hist_val)
 
 record = Entrez.read(handle)
+handle.close()
 total_n_series = int(record['Count'])
 if total_n_series == 0:
-    print("No geo series with the given search terms were found. Please repeat your query with different search terms.\n")
+    print("\nNo geo series with the given search terms were found. Please repeat your query with different search terms.\n")
     sys.exit()
 else:
-    print("A total of "+str(total_n_series)+" geo DataSets that are compatible with the search query have beend found.")
+    print("\nA total of "+str(total_n_series)+" geo datasets that are compatible with the search query have been found.")
 
-if(not(use_small_number_of_series and not(use_id))):
-    handle.close()
+N_str = input("\nSpecify the number of geo database entries, N>0, that you wish to extract.\nIf you input N<=0 or nothing, all found geo database entries for the search query will be fetched\nN = ")
+
+if(len(N_str) > 0):
+    NN = int(N_str)
+    if NN >0:
+        small_number_of_series = NN
+        use_small_number_of_series = True
+
 
 if(not use_small_number_of_series):
     handle = Entrez.esearch(db="gds", term=search_term, retmax=total_n_series, usehistory=use_hist_val)
-    record = Entrez.read(handle)
-    if(use_id):
-        handle.close()
+else:
+    handle = Entrez.esearch(db="gds", term=search_term, retmax=small_number_of_series, usehistory=use_hist_val)
+
+record = Entrez.read(handle)
+handle.close()
 
 idlist = record['IdList']
 count = int(len(idlist))
-print('Total number of found entries: ' + str(count))
+print('Number of geo datasets to be fetched: ' + str(count))
+
+if not use_id:
+    batch_size = min(5000,count)
+
+print('\n')
 
 for start in range(0, count, batch_size):
-    print(start)
     if batch_size == 1:
         end = start
         if(use_id):

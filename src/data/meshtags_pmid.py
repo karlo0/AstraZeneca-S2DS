@@ -5,6 +5,9 @@ import pickle
 import os
 from Bio import Entrez
 Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
+
+print("\n## obtain mesh ids for geo series by following pubmed puplications ##\n")
+
 try:
     from urllib.error import HTTPError  # for Python 3
 except ImportError:
@@ -17,14 +20,13 @@ cdir = os.path.dirname(os.path.realpath(__file__))
 basedir = os.path.dirname(os.path.dirname(cdir))
 
 
-
 dir_data_in = basedir+"/data/interim/records_samples/"
 dir_data_out = basedir+"/data/interim/"
 
 if not os.path.exists(dir_data_out):
-    os.mkdirs(dir_data_out)
+    os.makedirs(dir_data_out)
 
-fname = "df_geoid_date_meshui_from_pmid.pkl"
+fname = "geoid_date_meshui_pmid.pkl"
 
 
 def import_df_records():
@@ -64,11 +66,16 @@ def write_mesh_to_df(df_records):
     query_key = search_results["QueryKey"]
 
     count = len(list_pmid_unique)
-    batch_size = 1000
+    batch_size = min(1000,count)
+
+    #print(len(df_records))
+    #print(count)
+    #input()
 
     # initialize global dict for all distinct pmid numbers and their corresponding lists of mesh-ui numbers
     dict_pmid_mui = {x: [] for x in list_pmid_unique}
 
+    list_local_pmid = []
     # start iterating over batch_size samples to fetch from pubmed
     for start in range(0, count, batch_size):
         if batch_size == 1:
@@ -85,11 +92,13 @@ def write_mesh_to_df(df_records):
                 
                 for pm_artcle in data['PubmedArticle']:
                     pmid = np.int64(Entrez.Parser.StringElement(pm_artcle['MedlineCitation']['PMID']))
+                    list_local_pmid.append(pmid)
                     # initialize local lists for the mesh tag, ui and the flag whether it is major topic or not 
                     list_mui_local = []
                     # enter the list of mesh entries
                     try:
                         list_mesh = pm_artcle['MedlineCitation']['MeshHeadingList']
+
                         for mesh_entry in list_mesh:
                             mesh = mesh_entry['DescriptorName']
                             mesh_attr = mesh.attributes
@@ -98,6 +107,8 @@ def write_mesh_to_df(df_records):
                         if len(list_mui_local) > 0:
                             dict_pmid_mui[pmid] = list_mui_local
                     except KeyError:
+                        #print(pm_artcle['MedlineCitation'])
+                        #input()
                         pass
 
                 fetch_handle.close()
@@ -116,6 +127,13 @@ def write_mesh_to_df(df_records):
     list_geoid_nsamples_global  = []
     list_geoid_date_global      = []
     list_geoid_mui_global       = []
+
+    #print(dict_pmid_mui)
+    #print(df_records.index)
+    #print(df_records)
+    #print(len(list_local_pmid))
+    #print(count)
+    #input()
 
     for k in df_records.index:
 
@@ -148,4 +166,4 @@ df_geoid_mesh_pmid = write_mesh_to_df(df_records)
 df_geoid_mesh_pmid = df_geoid_mesh_pmid[['geo_id', 'nsamples', 'date', 'mesh_id']].sort_values(by=['geo_id']).reset_index(drop = True)
 
 #write dataframe to file
-df_geoid_mesh_pmid.to_pickle(output_data_path+fname)
+df_geoid_mesh_pmid.to_pickle(dir_data_out+fname)
