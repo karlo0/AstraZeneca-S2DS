@@ -21,8 +21,15 @@ import os
 """
 Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
 
-dir_data_in = '../../data/raw/geo_data' # rename with template
-dir_data_out = '../../data/interim/records_samples' # rename with template
+## Set paths
+# cdir = dir of this script
+cdir = os.path.dirname(os.path.realpath(__file__))
+# basedir = root dir of the repository
+basedir = os.path.dirname(os.path.dirname(cdir))
+
+
+dir_data_in = basedir+'/data/raw/geo_data'              # dir for reading
+dir_data_out = basedir+'/data/interim/records_samples'  # dir for storing
 
 if not os.path.exists(dir_data_out):
     os.mkdirs(dir_data_out)

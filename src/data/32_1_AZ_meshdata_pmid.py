@@ -10,15 +10,22 @@ try:
 except ImportError:
     from urllib2 import HTTPError  # for Python 2
 
-dir_data_in = "../../data/interim/records_samples/"
+## Set paths
+# cdir = dir of this script
+cdir = os.path.dirname(os.path.realpath(__file__))
+# basedir = root dir of the repository
+basedir = os.path.dirname(os.path.dirname(cdir))
 
-project_name = "AstraZenecaMar19"
 
-output_data_path = '../../data/interim/'
+
+dir_data_in = basedir+"/data/interim/records_samples/"
+dir_data_out = basedir+"/data/interim/"
+
+if not os.path.exists(dir_data_out):
+    os.mkdirs(dir_data_out)
+
 fname = "df_geoid_date_meshui_from_pmid.pkl"
 
-fpath = os.path.realpath(__file__)
-commonpath = os.path.commonpath([fpath, project_name])
 
 def import_df_records():
     fname = "records.pkl"

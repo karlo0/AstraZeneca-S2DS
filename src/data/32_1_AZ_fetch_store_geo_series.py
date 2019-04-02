@@ -10,9 +10,17 @@ except ImportError:
     from urllib2 import HTTPError  # for Python 2
 # retmax = maximum number of retrieved series
 
-dir_data_out = "../../data/raw/geo_data/"
+
+## Set paths
+# cdir = dir of this script
+cdir = os.path.dirname(os.path.realpath(__file__))
+# basedir = root dir of the repository
+basedir = os.path.dirname(os.path.dirname(cdir))
+
+dir_data_out = basedir+"/data/raw/geo_data/"
 if not os.path.exists(dir_data_out):
     os.makedirs(dir_data_out)
+
 filenamebase="all_gse_series_homo_sapiens"
 
 # use_small_number_of_series = True when only a small number of series shall be extracted. The number of series is specified by small_number_of_series
