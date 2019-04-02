@@ -28,6 +28,8 @@ the counting algorithm is as follows:
 (4) collect the counts and export
 """
 import pandas as pd
+import time
+start_time = time.time()
 
 # read the mesh database pkl file
 mesh_df = pd.read_pickle('../../data/final/mesh.pkl')
@@ -160,6 +162,8 @@ diseases_count_df = pd.DataFrame(disease_count.items())
 diseases_count_df = pd.DataFrame(disease_count.items(), columns = ['disease_mesh_heading', 'disease_count'])
 diseases_count_df.to_pickle('../../data/processed/disease_mesh_heading_count.pkl')
 
+end_time = time.time()
+print("total time taken:", start_time-end_time)
 
 # * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = #
 # * = * = * = * = * = * = * = * Archives * = * = * = * = * = * = * = * = * = #
