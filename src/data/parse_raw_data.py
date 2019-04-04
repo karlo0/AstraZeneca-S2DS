@@ -21,6 +21,8 @@ import os
 """
 Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
 
+print("\n## parse data into dataframes ##\n")
+
 ## Set paths
 # cdir = dir of this script
 cdir = os.path.dirname(os.path.realpath(__file__))
@@ -32,11 +34,11 @@ dir_data_in = basedir+'/data/raw/geo_data'              # dir for reading
 dir_data_out = basedir+'/data/interim/records_samples'  # dir for storing
 
 if not os.path.exists(dir_data_out):
-    os.mkdirs(dir_data_out)
-file_base_name = "all_gse_series_homo_sapiens_part"
+    os.makedirs(dir_data_out)
+
 output_file_rec = os.path.join(dir_data_out, 'records.pkl')
 output_file_sam = os.path.join(dir_data_out, 'samples.pkl')
-raw_files = sorted(glob.glob(os.path.join(dir_data_in, file_base_name+'*')))
+raw_files = sorted(glob.glob(os.path.join(dir_data_in, '*.xml')))
 
 if os.path.isdir(dir_data_out)!=1:
     os.mkdir(dir_data_out)
