@@ -29,7 +29,6 @@ the counting algorithm is as follows:
 """
 import pandas as pd
 import time
-start_time = time.time()
 
 # read the mesh database pkl file
 mesh_df = pd.read_pickle('../../data/final/mesh.pkl')
@@ -106,14 +105,53 @@ def convert_treenumber_to_parent_tree_hierarchy(tree_number):
         hierarchy_list.append(mesh_df.loc[row_index,'mesh_heading'])
     return(hierarchy_list)
 
-## start the counting
+def produce_disease_count(input_df, vocab_df, startdate, enddate):
+    # initialize dictionary for storing disease counts
+    # note: use entire mesh disease database so that diseases not studied get count of 0
+    disease_count = {}
+    for item in mesh_diseases_df.mesh_heading:
+        disease_count[item] = 0
+        
+    # make a unique dataframe in order to iterate the data while counting (see below)
+    unique_input_df = input_df.drop_duplicates(subset='geo_id')
     
-# initialize dictionary for storing disease counts
-# note: use entire mesh database so that diseases not studied get count of 0
-mesh_diseases_df = mesh_df[mesh_df.category=='C'] # only disease category
-disease_count = {}
-for item in mesh_diseases_df.mesh_heading:
-    disease_count[item] = 0
+    # note: all the commented print commands were used to debug
+    counter = 0 # to check progress
+    for row_index, row in unique_input_df.iterrows():    
+        print(counter)
+        unique_geo_id = unique_input_df.loc[row_index,'geo_id']
+    #    print('\n', row_index, 'geo_id:', unique_geo_id)
+        
+        all_mesh_ids_row_index = input_df.mesh_id[input_df.geo_id==unique_geo_id]
+    #    print('mesh_ids for study given by geo_id:', unique_geo_id, '\n', all_mesh_ids_row_index)
+        
+        all_diseases_geo_id = [] # all diseases studied by the geo_id
+        # associate each mesh_id with all its tree_numbers
+        for mesh_id in all_mesh_ids_row_index:
+            all_tree_numbers_mesh_id = convert_meshid_to_tree_numbers(mesh_id)
+            # note: each mesh-id may have multiple tree numbers!
+    #        print('all tree numbers for mesh_id', mesh_id, '\n', all_tree_numbers_mesh_id)   
+            # for each tree number, find all its parents
+            for tree_number in all_tree_numbers_mesh_id: 
+                if tree_number[0] == 'C': # exclude non-diseases (a second check)
+                    all_parents_disease = convert_treenumber_to_parent_tree_hierarchy(tree_number)
+    #                print('all parents for tree number', tree_number, '\n', all_parents_disease)
+                    # dont consider trees whose top level is 'Pathological'
+                    if not all_parents_disease[0].startswith('Pathological'):     
+                        all_diseases_geo_id.extend(all_parents_disease)
+    
+    #    print(all_diseases_geo_id)
+        unique_diseases_geo_id = set(all_diseases_geo_id)
+    #    print(unique_diseases_geo_id)
+        for disease in unique_diseases_geo_id:
+            disease_count[disease] = disease_count[disease] + 1
+        counter+= 1      
+    
+    return pd.DataFrame(disease_count.items(), columns = ['disease_mesh_heading', 'disease_count'])
+        
+    
+
+## input data
 
 # read the input database
 geo_df = pd.read_pickle('../../data/final/geo.pkl')
@@ -123,47 +161,17 @@ geo_diseases_df = geo_df[geo_df.category=='C'] # only disease category
 # note: even after restricting to just the disease category, one study has multiple mesh_ids 
 # because a study may be relevant to multiple diseases and therefore multiple trees
 
-# make a unique dataframe in order to iterate the data while counting (see below)
-unique_geo_diseases_df = geo_diseases_df.drop_duplicates(subset='geo_id')
+mesh_diseases_df = mesh_df[mesh_df.category=='C'] # only disease category
 
-# note: all the commented print commands were used to debug
-counter = 0 # to check progress
-for row_index, row in unique_geo_diseases_df.iterrows():    
-    print(counter)
-    unique_geo_id = unique_geo_diseases_df.loc[row_index,'geo_id']
-#    print('\n', row_index, 'geo_id:', unique_geo_id)
-    
-    all_mesh_ids_row_index = geo_diseases_df.mesh_id[geo_diseases_df.geo_id==unique_geo_id]
-#    print('mesh_ids for study given by geo_id:', unique_geo_id, '\n', all_mesh_ids_row_index)
-    
-    all_diseases_geo_id = [] # all diseases studied by the geo_id
-    # associate each mesh_id with all its tree_numbers
-    for mesh_id in all_mesh_ids_row_index:
-        all_tree_numbers_mesh_id = convert_meshid_to_tree_numbers(mesh_id)
-        # note: each mesh-id may have multiple tree numbers!
-#        print('all tree numbers for mesh_id', mesh_id, '\n', all_tree_numbers_mesh_id)   
-        # for each tree number, find all its parents
-        for tree_number in all_tree_numbers_mesh_id: 
-            if tree_number[0] == 'C': # exclude non-diseases (a second check)
-                all_parents_disease = convert_treenumber_to_parent_tree_hierarchy(tree_number)
-#                print('all parents for tree number', tree_number, '\n', all_parents_disease)
-                # dont consider trees whose top level is 'Pathological'
-                if not all_parents_disease[0].startswith('Pathological'):     
-                    all_diseases_geo_id.extend(all_parents_disease)
-
-#    print(all_diseases_geo_id)
-    unique_diseases_geo_id = set(all_diseases_geo_id)
-#    print(unique_diseases_geo_id)
-    for disease in unique_diseases_geo_id:
-        disease_count[disease] = disease_count[disease] + 1
-    counter+= 1    
-
-diseases_count_df = pd.DataFrame(disease_count.items())
-diseases_count_df = pd.DataFrame(disease_count.items(), columns = ['disease_mesh_heading', 'disease_count'])
-diseases_count_df.to_pickle('../../data/processed/disease_mesh_heading_count.pkl')
-
+## count
+start_time = time.time()
+diseases_count_df = produce_disease_count(geo_diseases_df, mesh_diseases_df, [], [])
+diseases_count_df.to_pickle('../../data/final/disease_mesh_heading_count.pkl')
 end_time = time.time()
-print("total time taken:", start_time-end_time)
+print("total time taken:", end_time-start_time)
+
+# for enire dataset for all dates, 4619.5 s = 77 min
+
 
 # * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = #
 # * = * = * = * = * = * = * = * Archives * = * = * = * = * = * = * = * = * = #
