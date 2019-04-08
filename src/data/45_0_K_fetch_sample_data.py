@@ -157,7 +157,7 @@ for acc_series in df_records['Accession']:
                     ch  = match.group('ch')
                     val = match.group('value')
                     if len(ch) > 0:
-                        ch = int(ch)
+                        ch = int(ch.strip())
                     else:
                         ch = 0
                     if key in gn_key_list:
