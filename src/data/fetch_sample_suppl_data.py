@@ -1,8 +1,9 @@
 """Script to fetch detailed informations about all samples that are contained in the already fetched geo series"""
-import numpy as np
+import numpy as n
 import pandas as pd
 import pickle
 import os
+import sys
 import re
 from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
@@ -21,16 +22,36 @@ cdir = os.path.dirname(os.path.realpath(__file__))
 basedir = os.path.dirname(os.path.dirname(cdir))
 
 
+#os.path.getmtime(path)
+
+
 dir_data_in = basedir+"/data/interim/records_samples/"
 dir_data_out = dir_data_in+"samples_suppl/"
 
 # filenamebase for the large file containing all possibly relevant supplemental informations about the samples
-fnameb_suppl = 'samples_suppl'
+fnameb_suppl = """samples_suppl"""
 # filenamebase for the smaller file containing the informations about the sample title and the characteristics of the sample channels
 fnameb_simple = 'samples_suppl_simple'
 
+# if files were already writtn before, this variable is overwritten with the last geo series accession number from which samples have been read
+last_gse_acc = ''
+# number of already written files
+fN = -1
+
 if not os.path.exists(dir_data_out):
     os.makedirs(dir_data_out)
+else:
+    # check whether files have been produced before
+    pattern = re.compile(r"""^"""+fnameb_suppl+"""_(?P<N>\d*).pkl$""")
+    fN_list = []
+    for f in os.listdir(dir_data_out):
+        match = pattern.match(f)
+        if(match):
+            fN_list.append(int(match.group("N")))
+    if len(fN_list) > 0:
+        fN = max(fN_list)
+        last_file = pickle.load( open(dir_data_out+fnameb_suppl+'_'+str(fN)+'.pkl','rb') )
+        last_gse_acc = last_file['start_end_gse_acc'][-1]
 
 def import_df(fname):
     print("start load samples database")
@@ -40,6 +61,14 @@ def import_df(fname):
 
 # import records dataframe
 df_records = import_df('records.pkl')
+
+if len(last_gse_acc) > 0:
+    start_ndx = df_records.index[df_records['Accession'] == last_gse_acc].to_list()[0]
+    if start_ndx != df_records.index[-1]:
+        df_records = df_records.iloc[(start_ndx+1):,:]
+    else:
+        sys.exit("\nAll suppl. GEO samples data has been fetched and their relevant data been stored\n")
+
 
 # url base from which we query
 urlbase = 'https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?'
@@ -77,7 +106,8 @@ cnt_samples = 0
 cnt_samples_glob = 0
 
 # counter for files to be pickled
-cnt_file = 0
+cnt_file = fN + 1
+
 
 # the number of samples whose informations are contained in each part of the to be written samples_supp dict
 batchsize = 10000
@@ -90,6 +120,96 @@ flag_break = False
 
 # flag for determining if batchsize of samples have been reached, use -1 to start the loop, 0 if within the loop the batchsize has not been reached and 1 else
 reached_batchsize = -1
+
+
+class Sample:
+    """ class to generate sample output from a list of strings that belong to the sample entry in the corresponding geo series and a regular expression pattern used for matching key, ch(annel number) and, (key) val(ue)
+        - output is
+            - self.out: dict of the gn_key_list keys and corresponding values together with the channel entries as further nested dicts
+            - self.out_simple: dict with title as key and corresponding value together with numbers as additional keys identifying the channels whose values are the channel characteristics
+    """
+    def __init__(self, sample_lines, pattern):
+        """ intit class """
+        self.__lines = sample_lines[1:]
+        self.__loc_sample_nest_key_list = gn_key_list[:]
+        self.__loc_sample_nest_val_list = [[] for i in range(len(gn_key_list))]
+        self.key = ''
+        self.key_old = ''
+        self.ch_old = -1
+        self.ch = -1
+        self.val = -1
+        self.__parse_lines(pattern)
+        self.__out()
+
+    def __parse_lines(self, pattern):
+        """ parse the lines in and match key, ch(annel number) and, (key) val(ue) with the help of the regular expression pattern """
+        for line in self.__lines:
+            match = pattern.match(line)
+            if(bool(match)):
+                self.key = match.group('key')
+                self.ch  = match.group('ch')
+                self.val = match.group('value')
+                self.__clean()
+                if len(self.ch) > 0:
+                    self.ch = int(self.ch.strip())
+                else:
+                   self.ch = 0
+                if self.key in gn_key_list:
+                    if self.key != 'channel_count':
+                        self.__loc_sample_nest_val_list[gn_key_list.index(self.key)].append(self.val)
+                    else:
+                        self.val = self.val.strip()
+                        try:
+                            self.val = int(self.val)
+                        except:
+                            pass
+                        self.__loc_sample_nest_val_list[gn_key_list.index(self.key)] = self.val
+                else:
+                    if self.ch > 0:
+                        if self.key in ch_key_list:
+                            if self.ch not in self.__loc_sample_nest_key_list:
+                                self.__loc_sample_nest_key_list.append(self.ch)
+                                self.__loc_sample_nest_val_list.append([[] for i in range(len(ch_key_list))])
+                                self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch)][ch_key_list.index(self.key)].append(self.val)
+                            else:
+                                self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch)][ch_key_list.index(self.key)].append(self.val)
+                self.key_old = self.key
+                self.ch_old = self.ch
+            self.__clean()
+
+    def __clean(self):
+        """ clean the values list entries by joining string list entries to a single string list entry for certain keys """
+        if( self.key_old != self.key ):
+            if self.key_old in gn_key_list:
+                if isinstance(self.__loc_sample_nest_val_list[gn_key_list.index(self.key_old)], list):
+                    l_tmp_list = len(self.__loc_sample_nest_val_list[gn_key_list.index(self.key_old)])
+                    if l_tmp_list > 1:
+                        if self.key_old in keys_flt_vals:
+                            self.__loc_sample_nest_val_list[gn_key_list.index(self.key_old)] = [" ".join(self.__loc_sample_nest_val_list[gn_key_list.index(self.key_old)])]
+            else:
+                if self.ch_old > 0:
+                    if self.key_old in ch_key_list:
+                        if self.ch_old in self.__loc_sample_nest_key_list:
+                            if isinstance(self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch_old)][ch_key_list.index(self.key_old)], list):
+                                l_tmp_list = len(self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch_old)][ch_key_list.index(self.key_old)])
+                                if l_tmp_list > 1:
+                                    if self.key_old in keys_flt_vals:
+                                        self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch_old)][ch_key_list.index(self.key_old)] = [" ".join(self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch_old)][ch_key_list.index(self.key_old)])]
+
+    def __out(self):
+        """ method to store the relevant sample informations for writing """
+        ch_count_list = list(set(self.__loc_sample_nest_key_list).difference(set(gn_key_list)))
+        self.__loc_sample_nest_key_list_simple = ['title']
+        self.__loc_sample_nest_val_list_simple = [self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index('title')]]
+        if len(ch_count_list) > 0:
+            for self.ch in ch_count_list:
+                self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch)] = dict(zip(ch_key_list, self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch)]))
+                self.__loc_sample_nest_key_list_simple.append(self.ch)
+                self.__loc_sample_nest_val_list_simple.append(self.__loc_sample_nest_val_list[self.__loc_sample_nest_key_list.index(self.ch)]['characteristics'])
+        self.out = dict(zip(self.__loc_sample_nest_key_list, self.__loc_sample_nest_val_list))
+        self.out_simple = dict(zip(self.__loc_sample_nest_key_list_simple, self.__loc_sample_nest_val_list_simple))
+
+
 
 for acc_series in df_records['Accession']:
     print(acc_series)
@@ -114,14 +234,14 @@ for acc_series in df_records['Accession']:
             time.sleep(1)
         else:
             code = urllib_query.getcode()
-    result_raw = urllib_query.read()
+    gse_str_entries_raw = urllib_query.read()
     urllib_query.close()
-    result_raw = result_raw.decode('utf-8')
-    result = result_raw.splitlines()
-    ndxl = [i for i, x in enumerate(result) if x.startswith('^SAMPLE')]
-    ndxl.append(len(result))
+    gse_str_entries_raw = gse_str_entries_raw.decode('utf-8')
+    gse_str_entries = gse_str_entries_raw.splitlines()
+    ndxl = [i for i, x in enumerate(gse_str_entries) if x.startswith('^SAMPLE')]
+    ndxl.append(len(gse_str_entries))
     for i in range(len(ndxl[0:-1])):
-        sample_lines = result[ndxl[i]:ndxl[i+1]]
+        sample_lines = gse_str_entries[ndxl[i]:ndxl[i+1]]
         match = pattern.match(sample_lines[0])
         sample_acc_id = match.group('value')
         if sample_acc_id not in glob_samples_acc_key_list:
@@ -129,90 +249,12 @@ for acc_series in df_records['Accession']:
             glob_samples_acc_key_list_reset.append(sample_acc_id)
             cnt_samples += 1
             cnt_samples_glob += 1
-            loc_sample_nest_key_list = gn_key_list[:]
-            loc_sample_nest_val_list = [[] for i in range(len(gn_key_list))]
             print((cnt_samples_glob,sample_acc_id))
-            sample_lines = sample_lines[1:]
-            key_old = ''
-            ch_old = -1
-            for line in sample_lines:
-                match = pattern.match(line)
-                if(bool(match)):
-                    key = match.group('key')
-                    ch  = match.group('ch')
-                    val = match.group('value')
-                    if( key_old != key ):
-                        if key_old in gn_key_list:
-                            if isinstance(loc_sample_nest_val_list[gn_key_list.index(key_old)], list):
-                                l_tmp_list = len(loc_sample_nest_val_list[gn_key_list.index(key_old)])
-                                if l_tmp_list > 1:
-                                    if key_old in keys_flt_vals:
-                                        loc_sample_nest_val_list[gn_key_list.index(key_old)] = [" ".join(loc_sample_nest_val_list[gn_key_list.index(key_old)])]
-                        else:
-                            if ch_old > 0:
-                                if key_old in ch_key_list:
-                                    if ch_old in loc_sample_nest_key_list:
-                                        if isinstance(loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)], list):
-                                            l_tmp_list = len(loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)])
-                                            if l_tmp_list > 1:
-                                                if key_old in keys_flt_vals:
-                                                    loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)] = [" ".join(loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)])]
 
-                    if len(ch) > 0:
-                        ch = int(ch.strip())
-                    else:
-                        ch = 0
-                    if key in gn_key_list:
-                        if key != 'channel_count':
-                            loc_sample_nest_val_list[gn_key_list.index(key)].append(val)
-                        else:
-                            val = val.strip()
-                            try:
-                                val = int(val)
-                            except:
-                                pass
-                            loc_sample_nest_val_list[gn_key_list.index(key)] = val
-                    else:
-                        if ch > 0:
-                            if key in ch_key_list:
-                                if ch not in loc_sample_nest_key_list:
-                                    loc_sample_nest_key_list.append(ch)
-                                    loc_sample_nest_val_list.append([[] for i in range(len(ch_key_list))])
-                                    loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch)][ch_key_list.index(key)].append(val)
-                                else:
-                                    loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch)][ch_key_list.index(key)].append(val)
-                key_old = key
-                ch_old = ch
+            sample = Sample(sample_lines, pattern)
 
-            if key_old in gn_key_list:
-                if isinstance(loc_sample_nest_val_list[gn_key_list.index(key_old)], list):
-                    l_tmp_list = len(loc_sample_nest_val_list[gn_key_list.index(key_old)])
-                    if l_tmp_list > 1:
-                        if key_old in keys_flt_vals:
-                            loc_sample_nest_val_list[gn_key_list.index(key_old)] = [" ".join(loc_sample_nest_val_list[gn_key_list.index(key_old)])]
-            else:
-                if ch_old > 0:
-                    if key_old in ch_key_list:
-                        if ch_old in loc_sample_nest_key_list:
-                            if isinstance(loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)], list):
-                                l_tmp_list = len(loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)])
-                                if l_tmp_list > 1:
-                                    if key_old in keys_flt_vals:
-                                        loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)] = [" ".join(loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch_old)][ch_key_list.index(key_old)])]
-
-            ch_count_list = list(set(loc_sample_nest_key_list).difference(set(gn_key_list)))
-            loc_sample_nest_key_list_simple = ['title']
-            loc_sample_nest_val_list_simple = [loc_sample_nest_val_list[loc_sample_nest_key_list.index('title')]]
-            if len(ch_count_list) > 0:
-                for ch in ch_count_list:
-                    loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch)] = dict(zip(ch_key_list, loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch)]))
-                    loc_sample_nest_key_list_simple.append(ch)
-                    loc_sample_nest_val_list_simple.append(loc_sample_nest_val_list[loc_sample_nest_key_list.index(ch)]['characteristics'])
-            glob_samples_dict_list.append(dict(zip(loc_sample_nest_key_list, loc_sample_nest_val_list)))
-            glob_samples_dict_list_simple.append(dict(zip(loc_sample_nest_key_list_simple, loc_sample_nest_val_list_simple)))
-
-            del loc_sample_nest_key_list, loc_sample_nest_key_list_simple, loc_sample_nest_val_list, loc_sample_nest_val_list_simple
-
+            glob_samples_dict_list.append(sample.out)
+            glob_samples_dict_list_simple.append(sample.out_simple)
 
             # break from inner loop when max_samples have been fetched
             if max_samples > 0:
