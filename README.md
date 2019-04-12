@@ -5,7 +5,7 @@ March Virtual S2DS 2019 @ PIVIGO
 
 # Team members
 	Luis Vela 		vela.vela.luis@gmail.com
-	Arun Narayanan 	arunisnowhere@gmail.com
+	Arun Narayanan 		arunisnowhere@gmail.com
 	Claire Chambers 	chambers.claire@gmail.com
 	Karsten Leonhardt 	karsten.leonhardt@posteo.de
 	
