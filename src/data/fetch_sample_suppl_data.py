@@ -1,4 +1,4 @@
-"""Script to fetch detailed informations about all samples that are contained in the already fetched geo series"""
+""" Script to fetch supplemental informations about all the samples that are linked with the geo series of interest"""
 import numpy as n
 import pandas as pd
 import pickle
@@ -236,7 +236,7 @@ for acc_series in df_records['Accession']:
             code = urllib_query.getcode()
     gse_str_entries_raw = urllib_query.read()
     urllib_query.close()
-    gse_str_entries_raw = gse_str_entries_raw.decode('utf-8')
+    gse_str_entries_raw = gse_str_entries_raw.decode('utf-8', 'replace' )
     gse_str_entries = gse_str_entries_raw.splitlines()
     ndxl = [i for i, x in enumerate(gse_str_entries) if x.startswith('^SAMPLE')]
     ndxl.append(len(gse_str_entries))
