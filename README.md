@@ -175,50 +175,49 @@ March Virtual S2DS 2019 @ PIVIGO
 
 
 # PART 2.2 - Time Series Analysis
-# PART 2.2 - Time Series Analysis
 
 Notebooks:
-src/features/51_1_C_filter_geo.ipynb
-src/features/51_1_C_get_counts_with_descendents.ipynb
-src/features/61_1_C_generate_time_series.ipynb
-src/visualization/43_1_C_vis_time_series.ipynb
-src/visualization/51_1_C_arima.ipynb
+- src/features/51_1_C_filter_geo.ipynb
+- src/features/51_1_C_get_counts_with_descendents.ipynb
+- src/features/61_1_C_generate_time_series.ipynb
+- src/visualization/43_1_C_vis_time_series.ipynb
+- src/visualization/51_1_C_arima.ipynb
 Inputs:
-data/final/geo.pkl
-data/final/mesh.pkl
+- data/final/geo.pkl
+- data/final/mesh.pkl
 Modules to install:
 Pandas, Numpy, os, Seaborn, Matplotlib, statsmodels, sklearn, copy
 Steps:
-Generate data in parts 2.2.1-2.2.3 below
-Then visualize in 2.2.4-2.2.5
+- Generate data in parts 2.2.1-2.2.3 below
+- Then visualize in 2.2.4-2.2.5
 
 
 ## Subpart 2.2.1: 51_1_C_filter_geo.ipynb
-Filter geo.pkl, the data frame containing disease and drug tags, so that disease tags uniquely belong to only the disease category. This excludes categories which are not diseases, like 'Animal models of disease'
-Run: src/features/51_1_C_filter_geo.ipynb
-Output: data/final/geo_filtered.pkl
+- Filter geo.pkl, the data frame containing disease and drug tags, so that disease tags uniquely belong to only the disease category. This excludes categories which are not diseases, like 'Animal models of disease'
+- Run: src/features/51_1_C_filter_geo.ipynb
+- Output: data/final/geo_filtered.pkl
 
 ## Subpart 2.2.2: 51_1_C_get_counts_with_descendents.ipynb
-Get counts for each disease, for ranking diseases by how studied they are in the GEO data base. This outputs counts of each category and their descendents in the MeSH tree (e.g. the category 'neoplasms' includes counts for all the subtypes of neoplasm, e.g. 'lung neoplasm', 'carcinoma', etc.)
-Run: src/features/51_1_C_get_counts_with_descendents
-Output: data/final/meshids_rankedby_NSeries.pkl
+- Get counts for each disease, for ranking diseases by how studied they are in the GEO data base. This outputs counts of each category and their descendents in the MeSH tree (e.g. the category 'neoplasms' includes counts for all the subtypes of neoplasm, e.g. 'lung neoplasm', 'carcinoma', etc.)
+- Run: src/features/51_1_C_get_counts_with_descendents
+- Output: data/final/meshids_rankedby_NSeries.pkl
 
 ## Subpart 2.2.3: 61_1_C_generate_time_series.ipynb
-Generate time series data: Generates data frames with sample and study counts over time  
-Run: src/features/61_1_C_generate_time_series
-Output: 
-data/final/samplesbyyear_for_plotting.pkl data/final/top_diseases_for_plotting.pkl
+- Generate time series data: Generates data frames with sample and study counts over time  
+- Run: src/features/61_1_C_generate_time_series
+- Output: 
+data/final/samplesbyyear_for_plotting.pkl, data/final/top_diseases_for_plotting.pkl
 data/final/countsbyyear_for_plotting.pkl
 
 ## Subpart 2.2.4: 43_1_C_vis_time_series.ipynb
-Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease
-Run: src/visualization/43_1_C_vis_time_series.ipynb
-Output visualizations folder: /reports/figures/desc
+- Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease
+- Run: src/visualization/43_1_C_vis_time_series.ipynb
+- Output visualizations folder: /reports/figures/desc
 
 ## Subpart 2.2.5: ARIMA forecasting
-Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
-Run: src/visualization/51_1_C_arima.ipynb
-Output visualizations folder: /reports/figures/desc
+- Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
+- Run: src/visualization/51_1_C_arima.ipynb
+- Output visualizations folder: /reports/figures/desc
 
 
 # PART 3 - Sample Classification (Bonus)
