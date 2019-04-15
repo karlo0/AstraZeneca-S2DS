@@ -176,21 +176,21 @@ March Virtual S2DS 2019 @ PIVIGO
 
 # PART 2.2 - Time Series Analysis
 
-Notebooks:
+### Notebooks:
 	- src/features/51_1_C_filter_geo.ipynb
 	- src/features/51_1_C_get_counts_with_descendents.ipynb
 	- src/features/61_1_C_generate_time_series.ipynb
 	- src/visualization/43_1_C_vis_time_series.ipynb
 	- src/visualization/51_1_C_arima.ipynb
 
-Inputs:
+### Inputs:
 	- data/final/geo.pkl
 	- data/final/mesh.pkl
 
-Modules to install:
+### Modules to install:
 	Pandas, Numpy, os, Seaborn, Matplotlib, statsmodels, sklearn, copy
 
-Steps:
+### Steps:
 	- Generate data in parts 2.2.1-2.2.3 below
 	- Then visualize in 2.2.4-2.2.5
 
