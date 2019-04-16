@@ -83,12 +83,12 @@ https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117746
 ## Data for time series, drug recommendation and basic information of the sample clustering
 
 To perform a flexible search query and download, tag and process the data, please execute the script
-notebooks/fetch_process_data.ipynb
+`notebooks/fetch_process_data.ipynb`.
 All required informations are given in the
 
 ## Supplemental data of the GEO samples
 The above script fetches only the accession numbers and the titles of the GEO samples. However, this information is only sufficient for the clustering of the samples. To label the clusters and successfully cluster them in different states, please execute the script
-src/data/fetch_sample_suppl_data.py
+`src/data/fetch_sample_suppl_data.py`
 which fetches supplemental informations of the samples such as characteristics of the channels, source name of the sample and description of the protocols, among others. The data will be downloaded into the folder
 data/interim/records_samples/samples_suppl/
 The data is consecutively downloaded and samples of about 10k are in each file `samples_suppl_k.pkl` and `samples_suppl_simple_k.pkl` where k is an integer that labels the files consecutively. The `*simple*.pkl` files contain only the channel characteristics and the title of the samples and the rest contains more detailed informations of the samples.
