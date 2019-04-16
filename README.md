@@ -100,8 +100,10 @@ March Virtual S2DS 2019 @ PIVIGO
 	
 	The data is consecutively downloaded and samples of about 10k are in each file `samples_suppl_k.pkl` and `samples_suppl_simple_k.pkl` where k is an integer that labels the files consecutively. The `*simple*.pkl` files contain only the channel characteristics and the title of the samples and the rest contains more detailed informations of the samples.
 	
-	Since there can be many samples to be downloaded, the script can continue to download where it previously stopped without downloading the same data. A requirement for this is that you do not delete the already downloaded files in 
+	Since there can be many samples to be downloaded, the script can continue to download where it previously stopped without downloading the same data. A requirement for this is that you do not delete the already downloaded files in
+	
 	`data/interim/records_samples/samples_suppl/`
+	
 	Before you can execute this script, make sure you executed the notebook `notebooks/fetch_process_data.ipynb` before, since the file `data/interim/records_samples/records.pkl` is required for execution.
 
 # PART 2.1 - Drug Recommendation
