@@ -105,19 +105,19 @@ March Virtual S2DS 2019 @ PIVIGO
 	The first notebook constructs the disease-drug graph by constructing its nodes and edges. The nodes correspond to MeSH id’s while the edges are constructing according to the number of studies that cite both nodes simultaneously, weighted by number of samples in that study. 
 
 	The notebook later queries the graph to find possible drug recommendations for existing diseases as well as possible second-uses for existing drugs and ranks them according to a recommendation strength metric -RS- such that: 
-	-In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
-	-In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
+	- In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
+	- In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
 
 	The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
 
 	
-## Subpart 2.1.1: 55_0_L_Disease_Drug_Graph.ipynb
+## Subpart 2.1.1: Disease_Drug_Graph.ipynb
 	
 ### Imports
-	-NumPy
-	-Pandas
-	-matplotlib 
-	-NetworkX
+	- NumPy
+	- Pandas
+	- matplotlib 
+	- NetworkX
  
 ### Input files
 	'../../data/final/mesh.pkl'
@@ -132,9 +132,9 @@ March Virtual S2DS 2019 @ PIVIGO
 
 ### Step3. 
 	Filter entries by:
-	-Date
-	-Category
-	-Depth
+	- Date
+	- Category
+	- Depth
 	
 	And manually exclude subcategory C23 (“Conditions, Signs and Symptoms”)
 
@@ -143,18 +143,18 @@ March Virtual S2DS 2019 @ PIVIGO
 
 ### Step5. 
 	Construct edge_list for future graph creation. The list ought to contain:
-	-Source (mesh_id)
-	-Target (mesh_id)
-	-Weight 
+	- Source (mesh_id)
+	- Target (mesh_id)
+	- Weight 
 
 ### Step6. 
 	Construct the graph using the edge_list and load node attributes from node_list. Save as .pkl; Save as .gexf 
 
 ### Step7. 
 	Select disease-only-subgraph. Run statistics:
-	-EigenCentrality
-	-PageRank
-	-Degree
+	- EigenCentrality
+	- PageRank
+	- Degree
 
 ### Step8. 
 	Measure all recommendation scores for top-n nodes (according to the EigenCentrality metric). Rank them. 
@@ -167,14 +167,14 @@ March Virtual S2DS 2019 @ PIVIGO
 
 
 	
-## Subpart 2.1.2: 55_0_L_Draw_Hierarchy.ipynb
+## Subpart 2.1.2: Draw_Hierarchy.ipynb
 
 ### Imports:
-	-Matplotlib.pyplot
-	-Pandas
-	-Numpy
-	-NetworkX 
-	-Pygraphviz
+	- Matplotlib.pyplot
+	- Pandas
+	- Numpy
+	- NetworkX 
+	- Pygraphviz
 
 ### Input files
 	‘../../data/interim/disease_parent_treenumbers.csv’
@@ -182,14 +182,14 @@ March Virtual S2DS 2019 @ PIVIGO
 
 ### Step1. 
 	Gather edge information. Resulting dataframe must contain two fields:
-	-Source (Mesh_tree_id)
-	-Target (Mesh_tree_id)
+	- Source (Mesh_tree_id)
+	- Target (Mesh_tree_id)
 
 ### Step2. 
 	Gather node information. Resulting dataframe must contain three fields
-	-Node_id (Mesh_tree_id)
-	-Node_label (Mesh Heading)
-	-Node_counts (Normalized number of counts)
+	- Node_id (Mesh_tree_id)
+	- Node_label (Mesh Heading)
+	- Node_counts (Normalized number of counts)
 
 ### Step3. 
 	Construct graph using edge_list and load node attributes from node_list. Save as .gexf.
