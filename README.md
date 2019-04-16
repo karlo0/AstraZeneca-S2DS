@@ -4,9 +4,9 @@ March Virtual S2DS 2019 @ PIVIGO
 	nLp-AttaCK
 
 # Team members
-	Luis Vela			vela.vela.luis@gmail.com
+	Luis Vela		vela.vela.luis@gmail.com
 	Arun Narayanan		arunisnowhere@gmail.com
-	Claire Chambers	chambers.claire@gmail.com
+	Claire Chambers		chambers.claire@gmail.com
 	Karsten Leonhardt	karsten.leonhardt@posteo.de
 	
 # Link to shared Google Drive folder
@@ -25,10 +25,10 @@ March Virtual S2DS 2019 @ PIVIGO
 	├── reports            
 	│   	└── figures        
 	└── src                
-    		├── data           
-    		├── external       
-    		├── features       
-    		└── visualization 
+		├── data           
+		├── external       
+		├── features       
+		└── visualization 
 
 # Naming convention 
 	All the python notebooks and scripts comply with the following naming convention:
