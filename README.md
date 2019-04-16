@@ -90,7 +90,7 @@ To perform a flexible search query and download, tag and process the data, pleas
 All required informations are given in the notebook.
 
 ## Supplemental data of the GEO samples
-The above script fetches only the accession numbers and the titles of the GEO samples. However, this information is only sufficient for the clustering of the samples. To label the clusters and successfully cluster them in different states, please execute the script
+The above script fetches only the accession numbers and the titles of the GEO samples. However, this information is only sufficient for the clustering of the samples. To download the necessary data to classify the samples names after successful clustering, please execute the script
 
 `src/data/fetch_sample_suppl_data.py`
 
