@@ -84,7 +84,7 @@ https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117746
 
 To perform a flexible search query and download, tag and process the data, please execute the script
 `notebooks/fetch_process_data.ipynb`.
-All required informations are given in the
+All required informations are given in the notebook.
 
 ## Supplemental data of the GEO samples
 The above script fetches only the accession numbers and the titles of the GEO samples. However, this information is only sufficient for the clustering of the samples. To label the clusters and successfully cluster them in different states, please execute the script
