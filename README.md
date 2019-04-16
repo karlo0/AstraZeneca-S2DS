@@ -72,7 +72,7 @@ March Virtual S2DS 2019 @ PIVIGO
 	-Classification and labeling of genetic samples (Bonus)
 
 # Raw resources
-We have access to the RAW information contained in the GEO database. The Gene-Expression-Omnibus (GEO) is a large public repository of genomic data submitted by the scientific community where users can query and download gene-expression studies and profiles for many species. In our case, we are concerned in the homo-sapiens case. See links below:
+	We have access to the RAW information contained in the GEO database. The Gene-Expression-Omnibus (GEO) is a large public repository of genomic data submitted by the scientific community where users can query and download gene-expression studies and profiles for many species. In our case, we are concerned in the homo-sapiens case. See links below:
 
 	https://www.ncbi.nlm.nih.gov/geo/info/overview.html
 	https://www.ncbi.nlm.nih.gov/geo/browse/?view=series
@@ -103,9 +103,10 @@ We have access to the RAW information contained in the GEO database. The Gene-Ex
 	- src/visualization/55_0_L_Draw_Hierarchy.ipynb
 
 	The first notebook constructs the disease-drug graph by constructing its nodes and edges. The nodes correspond to MeSH id’s while the edges are constructing according to the number of studies that cite both nodes simultaneously, weighted by number of samples in that study. 
-The notebook later queries the graph to find possible drug recommendations for existing diseases as well as possible second-uses for existing drugs and ranks them according to a recommendation strength metric -RS- such that: 
--In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
--In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
+
+	The notebook later queries the graph to find possible drug recommendations for existing diseases as well as possible second-uses for existing drugs and ranks them according to a recommendation strength metric -RS- such that: 
+	-In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
+	-In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
 
 	The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
 
@@ -134,6 +135,7 @@ The notebook later queries the graph to find possible drug recommendations for e
 	-Date
 	-Category
 	-Depth
+	
 	And manually exclude subcategory C23 (“Conditions, Signs and Symptoms”)
 
 ### Step4. 
@@ -244,6 +246,6 @@ The notebook later queries the graph to find possible drug recommendations for e
 
 # PART 3 - Sample Classification (Bonus)
 	# Subpart 2.2.5: ARIMA forecasting
-Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
-Run: src/visualization/51_1_C_arima.ipynb
-Output visualizations folder: /reports/figures/desc
+	Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
+	Run: src/visualization/51_1_C_arima.ipynb
+	Output visualizations folder: /reports/figures/desc
