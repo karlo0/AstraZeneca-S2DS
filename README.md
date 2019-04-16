@@ -4,13 +4,13 @@ March Virtual S2DS 2019 @ PIVIGO
 	nLp-AttaCK
 
 # Team members
-	Luis Vela 		vela.vela.luis@gmail.com
-	Arun Narayanan 		arunisnowhere@gmail.com
-	Claire Chambers 	chambers.claire@gmail.com
-	Karsten Leonhardt 	karsten.leonhardt@posteo.de
+	Luis Vela			vela.vela.luis@gmail.com
+	Arun Narayanan		arunisnowhere@gmail.com
+	Claire Chambers	chambers.claire@gmail.com
+	Karsten Leonhardt	karsten.leonhardt@posteo.de
 	
 # Link to shared Google Drive folder
-	https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
+https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
 
 # Directory structure
 	├── LICENSE
@@ -63,7 +63,7 @@ March Virtual S2DS 2019 @ PIVIGO
 	-Automated methods
 	-Differential Expression Analysis
 
-	How particular roadmap tackles the first two stages
+	Our particular roadmap tackles the first two stages
 
 # Concrete objectives   
 	-Data analysis of the GEO database
@@ -72,20 +72,42 @@ March Virtual S2DS 2019 @ PIVIGO
 	-Classification and labeling of genetic samples (Bonus)
 
 # Raw resources
-	We have access to the RAW information contained in the GEO database. The Gene-Expression-Omnibus (GEO) is a large public repository of genomic data submitted by the scientific community where users can query and download gene-expression studies and profiles for many species. In our case, we are concerned in the homo-sapiens case. See links below:
+We have access to the RAW information contained in the GEO database. The Gene-Expression-Omnibus (GEO) is a large public repository of genomic data submitted by the scientific community where users can query and download gene-expression studies and profiles for many species. In our case, we are concerned in the homo-sapiens case. See links below:
 	https://www.ncbi.nlm.nih.gov/geo/info/overview.html
 	https://www.ncbi.nlm.nih.gov/geo/browse/?view=series
-	https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117746
+https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117746
 	https://www.ncbi.nlm.nih.gov/geo/info/geo_paccess.html 
 
 
 # PART 1 - Querying GEO and generating data
+## Data for time series, drug recommendation and basic information of the sample clustering
+
+To perform a flexible search query and download, tag and process the data, please execute the script
+notebooks/fetch_process_data.ipynb
+All required informations are given in the
+
+## Supplemental data of the GEO samples
+The above script fetches only the accession numbers and the titles of the GEO samples. However, this information is only sufficient for the clustering of the samples. To label the clusters and successfully cluster them in different states, please execute the script
+src/data/fetch_sample_suppl_data.py
+which fetches supplemental informations of the samples such as characteristics of the channels, source name of the sample and description of the protocols, among others. The data will be downloaded into the folder
+data/interim/records_samples/samples_suppl/
+The data is consecutively downloaded and samples of about 10k are in each file `samples_suppl_k.pkl` and `samples_suppl_simple_k.pkl` where k is an integer that labels the files consecutively. The `*simple*.pkl` files contain only the channel characteristics and the title of the samples and the rest contains more detailed informations of the samples.
+Since there can be many samples to be downloaded, the script can continue to download where it previously stopped without downloading the same data. A requirement for this is that you do not delete the already downloaded files in `data/interim/records_samples/samples_suppl/`
+Before you can execute this script, make sure you executed the notebook `notebooks/fetch_process_data.ipynb` before, since the file `data/interim/records_samples/records.pkl` is required for execution.
+
 # PART 2.1 - Drug Recommendation
 
 	The drug recommendation is constructed via execution of the two following notebooks:
 	
 	- src/visualization/55_0_L_Disease_Drug_Graph.ipynb
 	- src/visualization/55_0_L_Draw_Hierarchy.ipynb
+
+	The first notebook constructs the disease-drug graph by constructing its nodes and edges. The nodes correspond to MeSH id’s while the edges are constructing according to the number of studies that cite both nodes simultaneously, weighted by number of samples in that study. 
+The notebook later queries the graph to find possible drug recommendations for existing diseases as well as possible second-uses for existing drugs and ranks them according to a recommendation strength metric -RS- such that: 
+-In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
+-In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
+
+	The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
 
 	
 ## Subpart 2.1.1: 55_0_L_Disease_Drug_Graph.ipynb
@@ -112,7 +134,7 @@ March Virtual S2DS 2019 @ PIVIGO
 	-Date
 	-Category
 	-Depth
-	And manually exclude subcategory C23 (Conditions, Signs and Symptoms)
+	And manually exclude subcategory C23 (“Conditions, Signs and Symptoms”)
 
 ### Step4. 
 	Construct node-list for future graph creation. The list ought to contain node_id, node_label and node_category.
@@ -133,7 +155,7 @@ March Virtual S2DS 2019 @ PIVIGO
 	-Degree
 
 ### Step8. 
-	Measure all recommendation scores for top-n nodes (according to EigenCentrality metric). Rank them. 
+	Measure all recommendation scores for top-n nodes (according to the EigenCentrality metric). Rank them. 
 
 ### Step9. 
 	Plot recommendation strength subgraph for a given cardinality using internal (limited) Network-X capabilities.
@@ -146,15 +168,15 @@ March Virtual S2DS 2019 @ PIVIGO
 ## Subpart 2.1.2: 55_0_L_Draw_Hierarchy.ipynb
 
 ### Imports:
-	Matplotlib.pyplot
-	Pandas
-	Numpy
-	NetworkX 
-	Pygraphviz
+	-Matplotlib.pyplot
+	-Pandas
+	-Numpy
+	-NetworkX 
+	-Pygraphviz
 
 ### Input files
-	../../data/interim/disease_parent_treenumbers.csv
-	../../data/interim/disease_tree_heading_count.csv
+	‘../../data/interim/disease_parent_treenumbers.csv’
+	‘../../data/interim/disease_tree_heading_count.csv’
 
 ### Step1. 
 	Gather edge information. Resulting dataframe must contain two fields:
@@ -176,51 +198,51 @@ March Virtual S2DS 2019 @ PIVIGO
 
 # PART 2.2 - Time Series Analysis
 
-### Notebooks:
-	- src/features/51_1_C_filter_geo.ipynb
-	- src/features/51_1_C_get_counts_with_descendents.ipynb
-	- src/features/61_1_C_generate_time_series.ipynb
-	- src/visualization/43_1_C_vis_time_series.ipynb
-	- src/visualization/51_1_C_arima.ipynb
-
-### Inputs:
-	- data/final/geo.pkl
-	- data/final/mesh.pkl
-
-### Modules to install:
-	Pandas, Numpy, os, Seaborn, Matplotlib, statsmodels, sklearn, copy
-
-### Steps:
-	- Generate data in parts 2.2.1-2.2.3 below
-	- Then visualize in 2.2.4-2.2.5
+Notebooks:
+src/features/51_1_C_filter_geo.ipynb
+src/features/51_1_C_get_counts_with_descendents.ipynb
+src/features/61_1_C_generate_time_series.ipynb
+src/visualization/43_1_C_vis_time_series.ipynb
+src/visualization/51_1_C_arima.ipynb
+Inputs:
+data/final/geo.pkl
+data/final/mesh.pkl
+Modules to install:
+Pandas, Numpy, os, Seaborn, Matplotlib, statsmodels, sklearn, copy
+Steps:
+Generate data in parts 2.2.1-2.2.3 below
+Then visualize in 2.2.4-2.2.5
 
 
 ## Subpart 2.2.1: 51_1_C_filter_geo.ipynb
-- Filter geo.pkl, the data frame containing disease and drug tags, so that disease tags uniquely belong to only the disease category. This excludes categories which are not diseases, like 'Animal models of disease'
-- Run: src/features/51_1_C_filter_geo.ipynb
-- Output: data/final/geo_filtered.pkl
+Filter geo.pkl, the data frame containing disease and drug tags, so that disease tags uniquely belong to only the disease category. This excludes categories which are not diseases, like 'Animal models of disease'
+Run: src/features/51_1_C_filter_geo.ipynb
+Output: data/final/geo_filtered.pkl
 
 ## Subpart 2.2.2: 51_1_C_get_counts_with_descendents.ipynb
-- Get counts for each disease, for ranking diseases by how studied they are in the GEO data base. This outputs counts of each category and their descendents in the MeSH tree (e.g. the category 'neoplasms' includes counts for all the subtypes of neoplasm, e.g. 'lung neoplasm', 'carcinoma', etc.)
-- Run: src/features/51_1_C_get_counts_with_descendents
-- Output: data/final/meshids_rankedby_NSeries.pkl
+Get counts for each disease, for ranking diseases by how studied they are in the GEO data base. This outputs counts of each category and their descendents in the MeSH tree (e.g. the category 'neoplasms' includes counts for all the subtypes of neoplasm, e.g. 'lung neoplasm', 'carcinoma', etc.)
+Run: src/features/51_1_C_get_counts_with_descendents
+Output: data/final/meshids_rankedby_NSeries.pkl
 
 ## Subpart 2.2.3: 61_1_C_generate_time_series.ipynb
-- Generate time series data: Generates data frames with sample and study counts over time  
-- Run: src/features/61_1_C_generate_time_series
-- Output: 
-data/final/samplesbyyear_for_plotting.pkl, data/final/top_diseases_for_plotting.pkl
+Generate time series data: Generates data frames with sample and study counts over time  
+Run: src/features/61_1_C_generate_time_series
+Output: 
+data/final/samplesbyyear_for_plotting.pkl data/final/top_diseases_for_plotting.pkl
 data/final/countsbyyear_for_plotting.pkl
 
-## Subpart 2.2.4: 43_1_C_vis_time_series.ipynb
-- Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease
-- Run: src/visualization/43_1_C_vis_time_series.ipynb
-- Output visualizations folder: /reports/figures/desc
+### Subpart 2.2.4: 43_1_C_vis_time_series.ipynb
+Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease
+Run: src/visualization/43_1_C_vis_time_series.ipynb
+Output visualizations folder: /reports/figures/desc
 
-## Subpart 2.2.5: ARIMA forecasting
-- Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
-- Run: src/visualization/51_1_C_arima.ipynb
-- Output visualizations folder: /reports/figures/desc
-
+### Subpart 2.2.5: ARIMA forecasting
+Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
+Run: src/visualization/51_1_C_arima.ipynb
+Output visualizations folder: /reports/figures/desc
 
 # PART 3 - Sample Classification (Bonus)
+	# Subpart 2.2.5: ARIMA forecasting
+Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
+Run: src/visualization/51_1_C_arima.ipynb
+Output visualizations folder: /reports/figures/desc
