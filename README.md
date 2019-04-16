@@ -245,7 +245,13 @@ March Virtual S2DS 2019 @ PIVIGO
 
 
 # PART 3 - Sample Classification (Bonus)
-	# Subpart 2.2.5: ARIMA forecasting
-	Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
-	Run: src/visualization/51_1_C_arima.ipynb
-	Output visualizations folder: /reports/figures/desc
+	# Subpart 3.1: labeling samples using _string_matching_heuristic_
+    Uses predefined list to label the sample titles 
+    uses samples.pkl as input data
+
+    # Subpart 3.2: labeling samples using clustering method
+    a clustering method (Affinity propagation with Levenshtein distance) clusters the sample titles and a labeling method (longest common substring) assigns labels to the clusters   
+    uses samples.pkl as input data
+    only examples shown
+    problems with the method and potential improvements are mentioned
+
