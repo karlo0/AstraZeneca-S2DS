@@ -7,7 +7,7 @@ March Virtual S2DS 2019 @ PIVIGO
 	Luis Vela		vela.vela.luis@gmail.com
 	Arun Narayanan		arunisnowhere@gmail.com
 	Claire Chambers		chambers.claire@gmail.com
-	Karsten Leonhardt	karsten.leonhardt@posteo.de
+	Karsten Leonhardt	karlo1986@gmx.de
 	
 # Link to shared Google Drive folder
 	https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
@@ -83,17 +83,18 @@ March Virtual S2DS 2019 @ PIVIGO
 # PART 1 - Querying GEO and generating data
 ## Data for time series, drug recommendation and basic information of the sample clustering
 
-	To perform a flexible search query and download, tag and process the data, please execute the script: 'notebooks/fetch_process_data.ipynb'.
-	All required informations are given in the notebook.
+To perform a flexible search query and download, tag and process the data, please execute the script:
+'src/data/fetch_process_data.ipynb'.
+All required informations are given in the notebook.
 
 ## Supplemental data of the GEO samples
-	The above script fetches only the accession numbers and the titles of the GEO samples. However, this information is only sufficient for the clustering of the samples. To label the clusters and successfully cluster them in different states, please execute the script
-	`src/data/fetch_sample_suppl_data.py`
-	which fetches supplemental informations of the samples such as characteristics of the channels, source name of the sample and description of the protocols, among others. The data will be downloaded into the folder
-	data/interim/records_samples/samples_suppl/
-	The data is consecutively downloaded and samples of about 10k are in each file `samples_suppl_k.pkl` and `samples_suppl_simple_k.pkl` where k is an integer that labels the files consecutively. The `*simple*.pkl` files contain only the channel characteristics and the title of the samples and the rest contains more detailed informations of the samples.
-	Since there can be many samples to be downloaded, the script can continue to download where it previously stopped without downloading the same data. A requirement for this is that you do not delete the already downloaded files in `data/interim/records_samples/samples_suppl/`
-	Before you can execute this script, make sure you executed the notebook `notebooks/fetch_process_data.ipynb` before, since the file `data/interim/records_samples/records.pkl` is required for execution.
+The above script fetches only the accession numbers and the titles of the GEO samples. However, this information is only sufficient for the clustering of the samples. To label the clusters and successfully cluster them in different states, please execute the script
+`src/data/fetch_sample_suppl_data.py`
+which fetches supplemental informations of the samples such as characteristics of the channels, source name of the sample and description of the protocols, among others. The data will be downloaded into the folder
+`data/interim/records_samples/samples_suppl/`
+The data is consecutively downloaded and samples of about 10k are in each file `samples_suppl_k.pkl` and `samples_suppl_simple_k.pkl` where k is an integer that labels the files consecutively. The `*simple*.pkl` files contain only the channel characteristics and the title of the samples and the rest contains more detailed informations of the samples.
+Since there can be many samples to be downloaded, the script can continue to download where it previously stopped without downloading the same data. A requirement for this is that you do not delete the already downloaded files in `data/interim/records_samples/samples_suppl/`
+Before you can execute this script, make sure you executed the notebook `notebooks/fetch_process_data.ipynb` before, since the file `data/interim/records_samples/records.pkl` is required for execution.
 
 # PART 2.1 - Drug Recommendation
 
