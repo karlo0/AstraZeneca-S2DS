@@ -1,83 +1,83 @@
 # March Virtual S2DS 2019 @ PIVIGO
 
 ## Team name
-	nLp-AttaCK
+nLp-AttaCK
 
 ## Team members
-	Luis Vela		vela.vela.luis@gmail.com
-	Arun Narayanan		arunisnowhere@gmail.com
-	Claire Chambers		chambers.claire@gmail.com
-	Karsten Leonhardt	karlo1986@gmx.de
+Luis Vela		vela.vela.luis@gmail.com
+Arun Narayanan		arunisnowhere@gmail.com
+Claire Chambers		chambers.claire@gmail.com
+Karsten Leonhardt	karlo1986@gmx.de
 	
 ## Link to shared Google Drive folder
-	https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
+https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
 
 ## Directory structure
-	├── LICENSE
-	├── README.md
-	├── data (Google Drive)
-	│	├── external       
-	│   	├── interim        
-	│   	├── final          
-	│   	└── raw            
-	├── docs               
-	├── notebooks          
-	├── reports            
-	│   	└── figures        
-	└── src                
-		├── data           
-		├── external       
-		├── features       
-		└── visualization 
+├── LICENSE
+├── README.md
+├── data (Google Drive)
+│	├── external       
+│   	├── interim        
+│   	├── final          
+│   	└── raw            
+├── docs               
+├── notebooks          
+├── reports            
+│   	└── figures        
+└── src                
+	├── data           
+	├── external       
+	├── features       
+	└── visualization 
 
 ## Naming convention 
-	All the python notebooks and scripts comply with the following naming convention:
-	
-	WD_V_A_name.ext
-	││ │ │ │    └── file extension
-	││ │ │ └─────── file name
-	││ │ └───────── author name (initial)
-	││ └─────────── version
-	│└───────────── day
-	└────────────── week
+All the python notebooks and scripts comply with the following naming convention:
+
+WD_V_A_name.ext
+││ │ │ │    └── file extension
+││ │ │ └─────── file name
+││ │ └───────── author name (initial)
+││ └─────────── version
+│└───────────── day
+└────────────── week
 
 ## Company
-	AstraZeneca (https://www.astrazeneca.com/)
+AstraZeneca (https://www.astrazeneca.com/)
 
 ## Company description
-	AstraZeneca is a R&D pharmaceutical company with presence in research fields as varied as Cardiovascular, Respiratory, Autoimmune, Respiratory and Oncology. Their focus is mainly on disease and drug discovery.
+AstraZeneca is a R&D pharmaceutical company with presence in research fields as varied as Cardiovascular, Respiratory, Autoimmune, Respiratory and Oncology. Their focus is mainly on disease and drug discovery.
 
 ## Company motivation
-	Reduce the cost of drug discovery. Either by using existing drugs on different diseases or automatizing the process of running Differential Gene Analysis on existing, publicly available, gene expression databases.
+Reduce the cost of drug discovery. Either by using existing drugs on different diseases or automatizing the process of running Differential Gene Analysis on existing, publicly available, gene expression databases.
 
 ## Company objective
-	Automatize and scale the following processes:
-	-Data Access
-	-Data Exploration
-	-Data Clustering and Labeling
-	-Data visualization
+Automatize and scale the following processes:
+- Data Access
+- Data Exploration
+- Data Clustering and Labeling
+- Data visualization
 
 ## Project roadmap
-	Three stages make up the process:
-	-Programmatic access
-	-Automated methods
-	-Differential Expression Analysis
+Three stages make up the process:
+- Programmatic access
+- Automated methods
+- Differential Expression Analysis
 
-	Our particular roadmap tackles the first two stages
+Our particular roadmap tackles the first two stages
 
 ## Concrete objectives   
-	-Data analysis of the GEO database
-		+Research trend analysis and forecast
-		+Drug recommendation
-	-Classification and labeling of genetic samples (Bonus)
+- Data analysis of the GEO database
+	+ Research trend analysis and forecast
+	+ Drug recommendation
+- Classification and labeling of genetic samples (Bonus)
 
 ## Raw resources
-	We have access to the RAW information contained in the GEO database. The Gene-Expression-Omnibus (GEO) is a large public repository of genomic data submitted by the scientific community where users can query and download gene-expression studies and profiles for many species. In our case, we are concerned in the homo-sapiens case. See links below:
+We have access to the RAW information contained in the GEO database. The Gene-Expression-Omnibus (GEO) is a large public repository of genomic data submitted by the scientific community where users can query and download gene-expression studies and profiles for many species. In our case, we are concerned in the homo-sapiens case. See links below:
 
-	https://www.ncbi.nlm.nih.gov/geo/info/overview.html
-	https://www.ncbi.nlm.nih.gov/geo/browse/?view=series
-	https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117746
-	https://www.ncbi.nlm.nih.gov/geo/info/geo_paccess.html 
+https://www.ncbi.nlm.nih.gov/geo/info/overview.html
+https://www.ncbi.nlm.nih.gov/geo/browse/?view=series
+https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117746
+https://www.ncbi.nlm.nih.gov/geo/info/geo_paccess.html 
 
 
 # PART 1 - Querying GEO and generating data
