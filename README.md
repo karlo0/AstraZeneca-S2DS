@@ -136,44 +136,47 @@ The second notebook is in charge of constructing the Hierarchical graph that dep
 - '../../data/final/geo.pkl'
 - '../../data/final/geo_restful_chem.pkl'
 
+### Logical procedure
+After the imports have been made, and the input files have been properly read, the notebook then proceeds to execute the remaining cells. Roughly speaking, each cell corresponds to one or more of the following logical steps
+
 #### Step1. 
 Merge labels from geo.pkl and geo_restful_chem.pkl to take advantage of the more readable and more accurate tags for drug description that come from the restful API.
 
-### Step2. 
+#### Step2. 
 Calculate the category of each tag (Disease ‘C’ or Drug ‘D’. Calculate the depth in the hierarchical tree of each tagged disease/drug.
 
-### Step3. 
+#### Step3. 
 Filter entries by:
 - Date
 - Category
 - Depth
 - And manually exclude subcategory C23 (“Conditions, Signs and Symptoms”)
 
-### Step4. 
+#### Step4. 
 Construct node-list for future graph creation. The list ought to contain node_id, node_label and node_category.
 
-### Step5. 
+#### Step5. 
 Construct edge_list for future graph creation. The list ought to contain:
 - Source (mesh_id)
 - Target (mesh_id)
 - Weight 
 
-### Step6. 
+#### Step6. 
 Construct the graph using the edge_list and load node attributes from node_list. Save as .pkl; Save as .gexf 
 
-### Step7. 
+#### Step7. 
 Select disease-only-subgraph. Run statistics:
 - EigenCentrality
 - PageRank
 - Degree
 
-### Step8. 
+#### Step8. 
 Measure all recommendation scores for top-n nodes (according to the EigenCentrality metric). Rank them. 
 
-### Step9. 
+#### Step9. 
 Plot recommendation strength subgraph for a given cardinality using internal (limited) Network-X capabilities.
 
-### Step10. 
+#### Step10. 
 Repeat steps 7,8 and 9 for the drug-only subgraph to obtain a second-use recommendation for the most important drug-like nodes.
 
 
@@ -191,23 +194,30 @@ Repeat steps 7,8 and 9 for the drug-only subgraph to obtain a second-use recomme
 - ‘../../data/interim/disease_parent_treenumbers.csv’
 - ‘../../data/interim/disease_tree_heading_count.csv’
 
-### Step1. 
+### Logical procedure
+Similarly, after importing the necessary libraries, and reading the input files into appropriate DataFrames, this notebook proceeds in the following logical fashion:
+
+#### Step1. 
 Gather edge information. Resulting dataframe must contain two fields:
 - Source (Mesh_tree_id)
 - Target (Mesh_tree_id)
 
-### Step2. 
+#### Step2. 
 Gather node information. Resulting dataframe must contain three fields
 - Node_id (Mesh_tree_id)
 - Node_label (Mesh Heading)
 - Node_counts (Normalized number of counts)
 
-### Step3. 
+#### Step3. 
 Construct graph using edge_list and load node attributes from node_list. Save as .gexf.
 
-### Step4. 
+#### Step4. 
 Use NetworkX and Graphviz to construct a raw visualization of the hierarchical structure of the MeSH ontology. Use prog={‘sfdp’, ‘fdp’, ‘dot’, ‘twopi’ or ‘neato’}.
 
+## Subpart 2.1.3 - Graph Visualization with Gephi
+Finally, after the .gexf files have been imported, one can use the open source graph-cisualization software GEPHI (https://gephi.org/) to create tailored visualizations of the graphs, subgraphs or filtered version of them. Some of the gephi images (.png and .svg) obtained for our presentation, the original (.gexf) files and the gephi-project files (.gephi) have been added to this repo under the following subfolder: 
+	
+	'/report/images/Graph'
 
 # PART 2.2 - Time Series Analysis
 
