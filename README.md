@@ -216,7 +216,7 @@ Finally, after the .gexf files have been imported, one can use the open source g
 
 using Gephi, the underlying tree hierarchy of the Mesh_Tree_id categories can be mapped intoa  single tree-entity. This entity can be represented as a directed graph with the edges direction always pointing from the parent node (category) to its daughter nodes (subcategories). The resulting image is shown below:
 
-![](reports/figures/Graph/Hierarchy1.png "Title" {height="36px" width="36px"})
+Here is an inline ![smiley](reports/figures/Graph/Hierarchy1.png){:height="36px" width="36px"}.
 
 # PART 2.2 - Time Series Analysis
 
