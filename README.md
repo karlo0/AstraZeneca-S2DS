@@ -110,6 +110,11 @@ The notebook later queries the graph to find possible drug recommendations for e
 	
 - In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
 - In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
+- The specific formula used for the RS scored is shown below:
+
+<img src="reports/figures/Graph/RS.png" width="450">
+
+Where i,j and k are node indexes, N_i denotes the set of neighboring nodes of node(i), and W_ij denotes the weight of the edge connecting node(i) and node(j).
 
 The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
 
@@ -228,7 +233,10 @@ Similarly, we can obtain a subgraph containing a specific disease (in our case "
 
 Using Gephi, the underlying tree hierarchy of the Mesh_Tree_id categories can be mapped intoa  single tree-entity. This entity can be represented as a directed graph with the edges direction always pointing from the parent node (category) to its daughter nodes (subcategories). The resulting image is shown below:
 
-<img src="reports/figures/Graph/Hierarchy3.png" width="500">
+<img src="reports/figures/Graph/Hierarchy2.png" width="500">
+
+
+As opposed to the picture in the header of this README.md file, the above tree structure has all the categories of the tree. All levels and all depths are displayed here. The color of the nodes corresponds to the Counts that each category has based on the numebr of times it appears in a summary.
 
 ### RS-score limitations: The 1-neighbor cases
 As an example of the bias that exists within the RS-score, we can see in the following graphs (Not generated with Gephi, but with NetworkX internal library) a few examples of cases where the RS score comes out as 1.00, but the neighbors connecting the target disease, and the recommended drug is very little (equal to 1). The examples in the lower row, although more relevant from a statistical point of view, come out with a lower RS score.
