@@ -221,6 +221,11 @@ Finally, after the .gexf files have been imported, one can use the open source g
 	
 	'/reports/figures/Graph'
 
+## Results
+
+![Alt text](reports/figures/Graph/Hierarchy1.png?raw=true "Title")
+
+
 # PART 2.2 - Time Series Analysis
 
 ## Notebooks:
