@@ -1,6 +1,6 @@
 # March Virtual S2DS 2019 @ PIVIGO
 
-<p>This is some text. <img src="reports/figures/Graph/Fig1.png" width="550" align="middle"> This is some text.</p>
+<p><img src="reports/figures/Graph/Fig1.png" width="550" align="middle"></p>
 
 ## Team name
 nLp-AttaCK
