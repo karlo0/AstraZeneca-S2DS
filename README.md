@@ -30,17 +30,6 @@ https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
 		├── features       
 		└── visualization 
 
-## Naming convention 
-All the python notebooks and scripts comply with the following naming convention:
-
-	WD_V_A_name.ext
-	││ │ │ │    └── file extension
-	││ │ │ └─────── file name
-	││ │ └───────── author name (initial)
-	││ └─────────── version
-	│└───────────── day
-	└────────────── week
-
 ## Company
 AstraZeneca (https://www.astrazeneca.com/)
 
