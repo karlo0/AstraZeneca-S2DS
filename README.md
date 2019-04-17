@@ -1,6 +1,6 @@
 # March Virtual S2DS 2019 @ PIVIGO
 
-<img src="reports/figures/Graph/Fig1.png" width="800">
+<img src="reports/figures/Graph/Fig1.png" width="600">
 
 ## Team name
 nLp-AttaCK
@@ -222,7 +222,7 @@ Using gephi, we can construct a subgraph by filtering out all the edges whose no
 ### Drug recommendation for a specific disease
 Similarly, we can obtain a subgraph containing a specific disease (in our case "Pancreatic Disesease") in blue, all its neighboring diseases in green, and finally, in red, a node corresponding to the drug "Disparate Innate Cytokine". We can see how the RS-score for this particular case is equal to 1.00 since all the green nodes are connected to the red drug but our target disease, in blue, is not.
 
-<img src="reports/figures/Graph/Fig2.png" width="500">
+<img src="reports/figures/Graph/Fig3.png" width="500">
 
 ### MeSH Hierachy Tree
 
