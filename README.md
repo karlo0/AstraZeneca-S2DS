@@ -305,7 +305,7 @@ Output visualizations folder: `/reports/figures/desc`<br/>
 # PART 3 - Sample Classification (Bonus)
 Objective: to label sample titles per study into control vs. non-control or healthy vs. diseased.<br/>
 
-There are >45000 studies with >2 million samples.<br/>
+There are more than 45000 studies with more than 2 million samples.<br/>
 
 Examples of sample titles:<br/>
 Study 1: MM253 24 h TPA, LSPM2 Control, LSPM2 Control Recovery<br/>
