@@ -217,6 +217,8 @@ Finally, after the .gexf files have been imported, one can use the open source g
 using Gephi, the underlying tree hierarchy of the Mesh_Tree_id categories can be mapped intoa  single tree-entity. This entity can be represented as a directed graph with the edges direction always pointing from the parent node (category) to its daughter nodes (subcategories). The resulting image is shown below:
 
 Here is an inline ![smiley](reports/figures/Graph/Hierarchy1.png){:height="36px" width="36px"}.
+![](reports/figures/Graph/Hierarchy1.png | width=100)
+![very good|512x397, 20%](reports/figures/Graph/Hierarchy1.png)
 
 # PART 2.2 - Time Series Analysis
 
@@ -257,9 +259,6 @@ Output:<br/>
 Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease<br/>
 Run: `src/visualization/vis_time_series.ipynb`<br/>
 Output visualizations folder: `/reports/figures/desc`<br/>
-
-### Time series of chemicals studied for specific disease
-![](reports/figures/desc/time_series_chem.png)
 
 ### Subpart 2.2.5: arima.ipynb
 
