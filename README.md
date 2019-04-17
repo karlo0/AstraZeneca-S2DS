@@ -4,42 +4,42 @@
 nLp-AttaCK
 
 ## Team members
-Luis Vela		vela.vela.luis@gmail.com
-Arun Narayanan		arunisnowhere@gmail.com
-Claire Chambers		chambers.claire@gmail.com
-Karsten Leonhardt	karlo1986@gmx.de
+	Luis Vela		vela.vela.luis@gmail.com
+	Arun Narayanan		arunisnowhere@gmail.com
+	Claire Chambers		chambers.claire@gmail.com
+	Karsten Leonhardt	karlo1986@gmx.de
 	
 ## Link to shared Google Drive folder
 https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
 
 ## Directory structure
-├── LICENSE
-├── README.md
-├── data (Google Drive)
-│	├── external       
-│   	├── interim        
-│   	├── final          
-│   	└── raw            
-├── docs               
-├── notebooks          
-├── reports            
-│   	└── figures        
-└── src                
-	├── data           
-	├── external       
-	├── features       
-	└── visualization 
+	├── LICENSE
+	├── README.md
+	├── data (Google Drive)
+	│	├── external       
+	│	├── interim        
+	│	├── final          
+	│	└── raw            
+	├── docs               
+	├── notebooks          
+	├── reports            
+	│	└── figures        
+	└── src                
+		├── data           
+		├── external       
+		├── features       
+		└── visualization 
 
 ## Naming convention 
 All the python notebooks and scripts comply with the following naming convention:
 
-WD_V_A_name.ext
-││ │ │ │    └── file extension
-││ │ │ └─────── file name
-││ │ └───────── author name (initial)
-││ └─────────── version
-│└───────────── day
-└────────────── week
+	WD_V_A_name.ext
+	││ │ │ │    └── file extension
+	││ │ │ └─────── file name
+	││ │ └───────── author name (initial)
+	││ └─────────── version
+	│└───────────── day
+	└────────────── week
 
 ## Company
 AstraZeneca (https://www.astrazeneca.com/)
