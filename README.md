@@ -212,12 +212,14 @@ Gather node information. Resulting dataframe must contain three fields
 Construct graph using edge_list and load node attributes from node_list. Save as .gexf.
 
 #### Step4. 
-Use NetworkX and Graphviz to construct a raw visualization of the hierarchical structure of the MeSH ontology. Use prog={‘sfdp’, ‘fdp’, ‘dot’, ‘twopi’ or ‘neato’}.
+Use NetworkX and Graphviz to construct a raw visualization of the hierarchical structure of the MeSH ontology. For raw visualization options iwithin NetworkX use:
+	
+	prog={‘sfdp’, ‘fdp’, ‘dot’, ‘twopi’, ‘neato’}.
 
 ## Subpart 2.1.3 - Graph Visualization with Gephi
 Finally, after the .gexf files have been imported, one can use the open source graph-cisualization software GEPHI (https://gephi.org/) to create tailored visualizations of the graphs, subgraphs or filtered version of them. Some of the gephi images (.png and .svg) obtained for our presentation, the original (.gexf) files and the gephi-project files (.gephi) have been added to this repo under the following subfolder: 
 	
-	'/report/images/Graph'
+	'/reports/figures/Graph'
 
 # PART 2.2 - Time Series Analysis
 
