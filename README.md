@@ -245,7 +245,10 @@ As an example of the bias that exists within the RS-score, we can see in the fol
 <img src="reports/figures/Graph/Fig4.png" width="800">
 
 
-# PART 2.2 - Time Series Analysis
+# PART 2.2 - Descriptive Analysis and Time Series Analysis
+
+### Pie chart of main disease types in GEO (MeSH tree: level 1) 
+<img src="reports/figures/desc/pie_chart.png" width="800">
 
 ## Notebooks:
 `src/features/51_1_C_filter_geo.ipynb`<br/>
@@ -284,6 +287,12 @@ Output:<br/>
 Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease<br/>
 Run: `src/visualization/vis_time_series.ipynb`<br/>
 Output visualizations folder: `/reports/figures/desc`<br/>
+
+### Time series of main disease categories (normalised sample counts, MeSH tree: level 1) 
+<img src="reports/figures/desc/time_series_main.png" width="800">
+
+### Time series of chemicals studied in conjunction with carcinoma (raw study counts) 
+<img src="reports/figures/desc/time_series_chem.png" width="800">
 
 ### Subpart 2.2.5: arima.ipynb
 
