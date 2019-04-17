@@ -273,10 +273,13 @@ Output visualizations folder: `/reports/figures/desc`<br/>
 ## Subpart 3.1: Labeling samples using _string_matching_heuristic_
 Uses predefined list to label the sample titles 
 Uses `samples.pkl` as input data
+Run: `src/clustering/samples_string_matching_heuristic`<br/>
 
 ## Subpart 3.2: Labeling samples using clustering method
 A clustering method (Affinity propagation with Levenshtein distance) clusters the sample titles and a labeling method (longest common substring) assigns labels to the clusters   
 Uses `samples.pkl` as input data
+Run: `src/clustering/samples_clustering`<br/>
+
 Only examples shown
 Problems with the method and potential improvements are mentioned
 
