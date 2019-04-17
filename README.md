@@ -266,6 +266,8 @@ Generate descriptive and time series plots: Pie chart of main disease categories
 Run: `src/visualization/vis_time_series.ipynb`<br/>
 Output visualizations folder: `/reports/figures/desc`<br/>
 
+![Alt text](reports/figures/desc/time_series_chem.png?raw=true "Title")
+
 ### Subpart 2.2.5: arima.ipynb
 
 Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions<br/>
