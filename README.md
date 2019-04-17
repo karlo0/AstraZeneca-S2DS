@@ -217,7 +217,7 @@ Finally, after the .gexf files have been imported, one can use the open source g
 ### Disease-Drug graph for top-N nodes only
 Using gephi, we can construct a subgraph by filtering out all the edges whose normalized weight is small. The resulting subgraph can be filtered again based on the Degree of the remaining nodes. In this way we can get a clean image of the most relevant disease/drug nodes present in out graph. The results are shown in the graph below where the green nodes correspond to diseases and the blue nodes correspond to drugs.
 
-<img src="reports/figures/Graph/DD_Graph.png" width="600">
+<img src="reports/figures/Graph/DD_graph.png" width="600">
 
 ### Drug recommendation for a specific disease
 Similarly, we can obtain a subgraph containing a specific disease (in our case "Pancreatic Disesease") in blue, all its neighboring diseases in green, and finally, in red, a node corresponding to the drug "Disparate Innate Cytokine". We can see how the RS-score for this particular case is equal to 1.00 since all the green nodes are connected to the red drug but our target disease, in blue, is not.
@@ -228,7 +228,7 @@ Similarly, we can obtain a subgraph containing a specific disease (in our case "
 
 Using Gephi, the underlying tree hierarchy of the Mesh_Tree_id categories can be mapped intoa  single tree-entity. This entity can be represented as a directed graph with the edges direction always pointing from the parent node (category) to its daughter nodes (subcategories). The resulting image is shown below:
 
-<img src="reports/figures/Graph/Hierarchy1.png" width="400">
+<img src="reports/figures/Graph/Hierarchy3.png" width="500">
 
 ### RS-score limitations: The 1-neighbor cases
 As an example of the bias that exists within the RS-score, we can see in the following graphs (Not generated with Gephi, but with NetworkX internal library) a few examples of cases where the RS score comes out as 1.00, but the neighbors connecting the target disease, and the recommended drug is very little (equal to 1). The examples in the lower row, although more relevant from a statistical point of view, come out with a lower RS score.
