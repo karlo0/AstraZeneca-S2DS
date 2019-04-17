@@ -267,16 +267,33 @@ Output visualizations folder: `/reports/figures/desc`<br/>
 
 
 # PART 3 - Sample Classification (Bonus)
+Objective: to label sample titles per study into control vs. non-control or healthy vs. diseased.<br/>
+<br/>
+Examples of sample tiltles:<br/>
+Study 1: MM253 24 h TPA, LSPM2 Control, LSPM2 Control Recovery<br/>
+Study 2: 3AMH02030706_Liver, MGMH030312023Aovary, 3AJZ02053105_SmoothMuscle<br/>
+Study 3: NHGRI_CRL-1634, NHGRI_UACC-457, MM127 Control, NHGRI_M93-047, NHGRI_NilC<br/>
+<br/>
+Two methods were used: (1) heuristic string matching and (2) clustering.<br/>
+
 ## Subpart 3.1: Labeling samples using _string_matching_heuristic_
-Uses predefined list to label the sample titles.
+Use a vocabulary, i.e., a predefined list. For example, Control = ['healthy', 'control', 'not infected', 'normal']<br/>
+Compare the sample titles with this vocabulary by<br/>
+(1) Exact string matching<br/>
+(2) Fuzzy string matching<br/>
+
 Uses `samples.pkl` as input data.<br/>
 Run: `src/clustering/samples_string_matching_heuristic.ipynb`<br/>
 
+Around 20% to 25% of the studies could be classified in this manner.<br/>
+
 ## Subpart 3.2: Labeling samples using clustering method
-A clustering method (Affinity propagation with Levenshtein distance) clusters the sample titles and a labeling method (longest common substring) assigns labels to the clusters.
+Use a clustering method (Affinity propagation with Levenshtein distance) to cluster the sample titles.<br/>
+Use a labeling method (longest common substring) to assign labels to the clusters.<br/>
+
 Uses `samples.pkl` as input data.<br/>
 Run: `src/clustering/samples_clustering.ipynb`<br/>
 
-Only examples shown;<br/>
-Problems with the method and potential improvements are mentioned.
+The notebook shows examples of the clustering and labeling, including successes and problematic labeling.<br/>
+Problems with the method and potential improvements are also mentioned.
 
