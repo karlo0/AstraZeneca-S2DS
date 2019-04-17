@@ -108,105 +108,105 @@ Before you can execute this script, make sure you executed the notebook `noteboo
 
 # PART 2.1 - Drug Recommendation
 
-	The drug recommendation is constructed via execution of the two following notebooks:
+The drug recommendation is constructed via execution of the two following notebooks:
 	
-	- src/visualization/55_0_L_Disease_Drug_Graph.ipynb
-	- src/visualization/55_0_L_Draw_Hierarchy.ipynb
+- src/visualization/Disease_Drug_Graph.ipynb
+- src/visualization/Draw_Hierarchy.ipynb
 
-	The first notebook constructs the disease-drug graph by constructing its nodes and edges. The nodes correspond to MeSH id’s while the edges are constructing according to the number of studies that cite both nodes simultaneously, weighted by number of samples in that study. 
+The first notebook constructs the disease-drug graph by constructing its nodes and edges. The nodes correspond to MeSH id’s while the edges are constructing according to the number of studies that cite both nodes simultaneously, weighted by number of samples in that study. 
 
-	The notebook later queries the graph to find possible drug recommendations for existing diseases as well as possible second-uses for existing drugs and ranks them according to a recommendation strength metric -RS- such that: 
-	- In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
-	- In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
+The notebook later queries the graph to find possible drug recommendations for existing diseases as well as possible second-uses for existing drugs and ranks them according to a recommendation strength metric -RS- such that:
+	
+- In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
+- In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
 
-	The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
+The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
 
 	
 ## Subpart 2.1.1: Disease_Drug_Graph.ipynb
 	
 ### Imports
-	- NumPy
-	- Pandas
-	- matplotlib 
-	- NetworkX
+- NumPy
+- Pandas
+- matplotlib 
+- NetworkX
  
 ### Input files
-	'../../data/final/mesh.pkl'
-	'../../data/final/geo.pkl'
-	'../../data/final/geo_restful_chem.pkl'
+- '../../data/final/mesh.pkl'
+- '../../data/final/geo.pkl'
+- '../../data/final/geo_restful_chem.pkl'
 
 ### Step1. 
-	Merge labels from geo.pkl and geo_restful_chem.pkl to take advantage of the more readable and more accurate tags for drug description that come from the restful API.
+Merge labels from geo.pkl and geo_restful_chem.pkl to take advantage of the more readable and more accurate tags for drug description that come from the restful API.
 
 ### Step2. 
-	Calculate the category of each tag (Disease ‘C’ or Drug ‘D’. Calculate the depth in the hierarchical tree of each tagged disease/drug.
+Calculate the category of each tag (Disease ‘C’ or Drug ‘D’. Calculate the depth in the hierarchical tree of each tagged disease/drug.
 
 ### Step3. 
-	Filter entries by:
-	- Date
-	- Category
-	- Depth
-	
-	And manually exclude subcategory C23 (“Conditions, Signs and Symptoms”)
+Filter entries by:
+- Date
+- Category
+- Depth
+- And manually exclude subcategory C23 (“Conditions, Signs and Symptoms”)
 
 ### Step4. 
-	Construct node-list for future graph creation. The list ought to contain node_id, node_label and node_category.
+Construct node-list for future graph creation. The list ought to contain node_id, node_label and node_category.
 
 ### Step5. 
-	Construct edge_list for future graph creation. The list ought to contain:
-	- Source (mesh_id)
-	- Target (mesh_id)
-	- Weight 
+Construct edge_list for future graph creation. The list ought to contain:
+- Source (mesh_id)
+- Target (mesh_id)
+- Weight 
 
 ### Step6. 
-	Construct the graph using the edge_list and load node attributes from node_list. Save as .pkl; Save as .gexf 
+Construct the graph using the edge_list and load node attributes from node_list. Save as .pkl; Save as .gexf 
 
 ### Step7. 
-	Select disease-only-subgraph. Run statistics:
-	- EigenCentrality
-	- PageRank
-	- Degree
+Select disease-only-subgraph. Run statistics:
+- EigenCentrality
+- PageRank
+- Degree
 
 ### Step8. 
-	Measure all recommendation scores for top-n nodes (according to the EigenCentrality metric). Rank them. 
+Measure all recommendation scores for top-n nodes (according to the EigenCentrality metric). Rank them. 
 
 ### Step9. 
-	Plot recommendation strength subgraph for a given cardinality using internal (limited) Network-X capabilities.
+Plot recommendation strength subgraph for a given cardinality using internal (limited) Network-X capabilities.
 
 ### Step10. 
-	Repeat steps 7,8 and 9 for the drug-only subgraph to obtain a second-use recommendation for the most important drug-like nodes.
+Repeat steps 7,8 and 9 for the drug-only subgraph to obtain a second-use recommendation for the most important drug-like nodes.
 
 
 	
 ## Subpart 2.1.2: Draw_Hierarchy.ipynb
 
 ### Imports:
-	- Matplotlib.pyplot
-	- Pandas
-	- Numpy
-	- NetworkX 
-	- Pygraphviz
+- Matplotlib.pyplot
+- Pandas
+- Numpy
+- NetworkX 
+- Pygraphviz
 
 ### Input files
-	‘../../data/interim/disease_parent_treenumbers.csv’
-	‘../../data/interim/disease_tree_heading_count.csv’
+- ‘../../data/interim/disease_parent_treenumbers.csv’
+- ‘../../data/interim/disease_tree_heading_count.csv’
 
 ### Step1. 
-	Gather edge information. Resulting dataframe must contain two fields:
-	- Source (Mesh_tree_id)
-	- Target (Mesh_tree_id)
+Gather edge information. Resulting dataframe must contain two fields:
+- Source (Mesh_tree_id)
+- Target (Mesh_tree_id)
 
 ### Step2. 
-	Gather node information. Resulting dataframe must contain three fields
-	- Node_id (Mesh_tree_id)
-	- Node_label (Mesh Heading)
-	- Node_counts (Normalized number of counts)
+Gather node information. Resulting dataframe must contain three fields
+- Node_id (Mesh_tree_id)
+- Node_label (Mesh Heading)
+- Node_counts (Normalized number of counts)
 
 ### Step3. 
-	Construct graph using edge_list and load node attributes from node_list. Save as .gexf.
+Construct graph using edge_list and load node attributes from node_list. Save as .gexf.
 
 ### Step4. 
-	Use NetworkX and Graphviz to construct a raw visualization of the hierarchical structure of the MeSH ontology. Use prog={‘sfdp’, ‘fdp’, ‘dot’, ‘twopi’ or ‘neato’}.
+Use NetworkX and Graphviz to construct a raw visualization of the hierarchical structure of the MeSH ontology. Use prog={‘sfdp’, ‘fdp’, ‘dot’, ‘twopi’ or ‘neato’}.
 
 
 # PART 2.2 - Time Series Analysis
