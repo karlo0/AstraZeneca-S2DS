@@ -110,6 +110,9 @@ The notebook later queries the graph to find possible drug recommendations for e
 	
 - In the case of a drug recommendation: RS corresponds to the weighted fraction of neighbors that use the new drug
 - In in the case of a second-use recommendation: RS corresponds to the weighted fraction of neighbors treating the target disease.
+- The specific formula used for the RS scored is shown below:
+
+<img src="reports/figures/Graph/RS.png" width="350">
 
 The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
 
