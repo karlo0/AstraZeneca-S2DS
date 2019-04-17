@@ -131,10 +131,10 @@ The second notebook is in charge of constructing the Hierarchical graph that dep
 - matplotlib 
 - NetworkX
  
-### Input files
-- '../../data/final/mesh.pkl'
-- '../../data/final/geo.pkl'
-- '../../data/final/geo_restful_chem.pkl'
+### Input files (from GDrive)
+- 'data/final/mesh.pkl'
+- 'data/final/geo.pkl'
+- 'data/final/geo_restful_chem.pkl'
 
 ### Logical procedure
 After the imports have been made, and the input files have been properly read, the notebook then proceeds to execute the remaining cells. Roughly speaking, each cell corresponds to one or more of the following logical steps
@@ -190,9 +190,9 @@ Repeat steps 7,8 and 9 for the drug-only subgraph to obtain a second-use recomme
 - NetworkX 
 - Pygraphviz
 
-### Input files
-- ‘../../data/interim/disease_parent_treenumbers.csv’
-- ‘../../data/interim/disease_tree_heading_count.csv’
+### Input files (from GDrive)
+- ‘data/final/disease_tree_heading_count.csv
+- 'data/final/disease_parent_treenumbers.csv'
 
 ### Logical procedure
 Similarly, after importing the necessary libraries, and reading the input files into appropriate DataFrames, this notebook proceeds in the following logical fashion:
