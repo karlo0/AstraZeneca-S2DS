@@ -296,7 +296,8 @@ Study 3: NHGRI_CRL-1634, NHGRI_UACC-457, MM127 Control, NHGRI_M93-047, NHGRI_Nil
 Two methods were used: (1) heuristic string matching and (2) clustering.<br/>
 
 ## Subpart 3.1: Labeling samples using _string_matching_heuristic_
-Use a vocabulary, i.e., a predefined list. For example, Control = ['healthy', 'control', 'not infected', 'normal']<br/>
+Use a vocabulary, i.e., a predefined list. For example, Control = ['healthy', 'control', 'not infected', 'normal'].<br/>
+<br/>
 Compare the sample titles with this vocabulary by<br/>
 (1) Exact string matching<br/>
 (2) Fuzzy string matching<br/>
@@ -313,6 +314,6 @@ Use a labeling method (longest common substring) to assign labels to the cluster
 Uses `samples.pkl` as input data.<br/>
 Run: `src/clustering/samples_clustering.ipynb`<br/>
 
-The notebook shows examples of the clustering and labeling, including successes and problematic labeling.<br/>
+The notebook shows examples of the clustering and labeling, including successful and problematic labeling.<br/>
 Problems with the method and potential improvements are also mentioned.
 
