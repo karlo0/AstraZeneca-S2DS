@@ -217,7 +217,7 @@ Finally, after the .gexf files have been imported, one can use the open source g
 ### Disease-Drug graph for top-N nodes only
 Using gephi, we can construct a subgraph by filtering out all the edges whose normalized weight is small. The resulting subgraph can be filtered again based on the Degree of the remaining nodes. In this way we can get a clean image of the most relevant disease/drug nodes present in out graph. The results are shown in the graph below where the green nodes correspond to diseases and the blue nodes correspond to drugs.
 
-<img src="reports/figures/Graph/Fig2.png" width="600">
+<img src="reports/figures/Graph/DD_Graph.png" width="600">
 
 ### Drug recommendation for a specific disease
 Similarly, we can obtain a subgraph containing a specific disease (in our case "Pancreatic Disesease") in blue, all its neighboring diseases in green, and finally, in red, a node corresponding to the drug "Disparate Innate Cytokine". We can see how the RS-score for this particular case is equal to 1.00 since all the green nodes are connected to the red drug but our target disease, in blue, is not.
