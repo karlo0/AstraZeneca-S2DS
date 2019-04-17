@@ -224,57 +224,60 @@ Finally, after the .gexf files have been imported, one can use the open source g
 # PART 2.2 - Time Series Analysis
 
 ## Notebooks:
-	src/features/51_1_C_filter_geo.ipynb
-	src/features/51_1_C_get_counts_with_descendents.ipynb
-	src/features/61_1_C_generate_time_series.ipynb
-	src/visualization/43_1_C_vis_time_series.ipynb
-	src/visualization/51_1_C_arima.ipynb
+`src/features/51_1_C_filter_geo.ipynb`<br/>
+`src/features/51_1_C_get_counts_with_descendents.ipynb`<br/>
+`src/features/61_1_C_generate_time_series.ipynb`<br/>
+`src/visualization/43_1_C_vis_time_series.ipynb`<br/>
+`src/visualization/51_1_C_arima.ipynb`<br/>
 ## Inputs:
-	data/final/geo.pkl
-	data/final/mesh.pkl
+`data/final/geo.pkl`<br/>
+`data/final/mesh.pkl`<br/>
 ## Modules to install:
-	Pandas, Numpy, os, Seaborn, Matplotlib, statsmodels, sklearn, copy
+`Pandas, Numpy, os, Seaborn, Matplotlib, statsmodels, sklearn, copy`
 ## Steps:
-	Generate data in parts 2.2.1-2.2.3 below
-	Then visualize in 2.2.4-2.2.5
+Generate data in parts 2.2.1-2.2.3<br/>
+Then visualize in 2.2.4-2.2.5<br/>
 
 
 ## Subpart 2.2.1: filter_geo.ipynb
-	Filter geo.pkl, the data frame containing disease and drug tags, so that disease tags uniquely belong to only the disease category. This excludes categories which are not diseases, like 'Animal models of disease'
-	Run: src/features/filter_geo.ipynb
-	Output: data/final/geo_filtered.pkl
+Filter `geo.pkl`, the data frame containing disease and drug tags, so that disease tags uniquely belong to only the disease category. This excludes categories which are not diseases, like 'Animal models of disease'<br/>
+Run: `src/features/filter_geo.ipynb`<br/>
+Output: `data/final/geo_filtered.pkl`
 
 ## Subpart 2.2.2: get_counts_with_descendents.ipynb
-	Get counts for each disease, for ranking diseases by how studied they are in the GEO data base. This outputs counts of each category and their descendents in the MeSH tree (e.g. the category 'neoplasms' includes counts for all the subtypes of neoplasm, e.g. 'lung neoplasm', 'carcinoma', etc.)
-	Run: src/features/get_counts_with_descendents
-	Output: data/final/meshids_rankedby_NSeries.pkl
+Get counts for each disease, for ranking diseases by how studied they are in the GEO data base. This outputs counts of each category and their descendents in the MeSH tree (e.g. the category 'neoplasms' includes counts for all the subtypes of neoplasm, e.g. 'lung neoplasm', 'carcinoma', etc.)<br/>
+Run: `src/features/get_counts_with_descendents`<br/>
+Output: `data/final/meshids_rankedby_NSeries.pkl`
 
 ## Subpart 2.2.3: generate_time_series.ipynb
-	Generate time series data: Generates data frames with sample and study counts over time  
-	Run: src/features/generate_time_series
-	Output: 
-	data/final/samplesbyyear_for_plotting.pkl data/final/top_diseases_for_plotting.pkl
-	data/final/countsbyyear_for_plotting.pkl
+Generate time series data: Generates data frames with sample and study counts over time<br/>
+Run: `src/features/generate_time_series`<br/>
+Output:<br/>
+`data/final/samplesbyyear_for_plotting.pkl`<br/> 
+`data/final/top_diseases_for_plotting.pkl`<br/>
+`data/final/countsbyyear_for_plotting.pkl`
 
 ### Subpart 2.2.4: vis_time_series.ipynb
-	Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease
-	Run: src/visualization/vis_time_series.ipynb
-	Output visualizations folder: /reports/figures/desc
+Generate descriptive and time series plots: Pie chart of main disease categories, Plot time series of sample counts for main categories and subcategories, Area plot for main categories, Area plot for selected subcategory, time series of chemicals studied in conjunction with specified disease<br/>
+Run: `src/visualization/vis_time_series.ipynb`<br/>
+Output visualizations folder: `/reports/figures/desc`<br/>
 
 ### Subpart 2.2.5: arima.ipynb
-	Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions
-	Run: src/visualization/arima.ipynb
-	Output visualizations folder: /reports/figures/desc
+
+Uses time series data generated in (3.) to train ARIMA model, compute error on test set, generate predictions for future (+n years), plot future predictions<br/>
+	
+Run: `src/visualization/arima.ipynb`<br/>
+Output visualizations folder: `/reports/figures/desc`<br/>
 
 
 # PART 3 - Sample Classification (Bonus)
 ## Subpart 3.1: Labeling samples using _string_matching_heuristic_
 Uses predefined list to label the sample titles 
-Uses samples.pkl as input data
+Uses `samples.pkl` as input data
 
 ## Subpart 3.2: Labeling samples using clustering method
 A clustering method (Affinity propagation with Levenshtein distance) clusters the sample titles and a labeling method (longest common substring) assigns labels to the clusters   
-Uses samples.pkl as input data
+Uses `samples.pkl` as input data
 Only examples shown
 Problems with the method and potential improvements are mentioned
 
