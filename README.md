@@ -114,7 +114,7 @@ The notebook later queries the graph to find possible drug recommendations for e
 
 <img src="reports/figures/Graph/RS.png" width="450">
 
-Where N_i denotes the set of neighboring nodes of node(i).
+Where i,j and k are node indexes, N_i denotes the set of neighboring nodes of node(i), and W_ij denotes the weight of the edge connecting node(i) and node(j).
 
 The second notebook is in charge of constructing the Hierarchical graph that depict the MeSH tree ID structure. It is based on the parent/daughter individual relations and the Count-attribute that roughly correspond to the number of counts that a topic is referenced throughout the corpus.
 
