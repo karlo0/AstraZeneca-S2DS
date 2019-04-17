@@ -142,6 +142,26 @@ Merge labels from geo.pkl and geo_restful_chem.pkl to take advantage of the more
 ### Step2. 
 Calculate the category of each tag (Disease ‘C’ or Drug ‘D’. Calculate the depth in the hierarchical tree of each tagged disease/drug.
 
+	# Separate Diseases
+	geo_C = geo_df[geo_df['category']=='C']
+	geo_D = geo_df[geo_df['category']=='D']
+
+	# Find new tags for drugs
+	geo_D_rest = pd.merge(
+	    geo_D, 
+	    rest_df['mesh_id disease_tag_from_tagger'.split()].drop_duplicates(), 
+	    how='inner', 
+	    on='mesh_id')
+	geo_D_rest.drop(columns='mesh_heading', inplace=True)
+	geo_D_rest = geo_D_rest['geo_id nsamples date mesh_id disease_tag_from_tagger category method'.split()]
+	geo_D_rest.rename(columns={'disease_tag_from_tagger':'mesh_heading'}, inplace=True)
+
+	# Concatenate them into new geo_df
+	geo_df = pd.concat([geo_C, geo_D_rest])
+
+	# Echo
+	geo_df.head()
+
 ### Step3. 
 Filter entries by:
 - Date
