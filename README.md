@@ -1,5 +1,7 @@
 # March Virtual S2DS 2019 @ PIVIGO
 
+<img src="reports/figures/Graph/Fig1.png" width="500" align="middle">
+
 ## Team name
 nLp-AttaCK
 
@@ -29,17 +31,6 @@ https://drive.google.com/drive/folders/1nHUJiPrvUruS4kLJrJSzfCdkm1UsYlwf
 		├── external       
 		├── features       
 		└── visualization 
-
-## Naming convention 
-All the python notebooks and scripts comply with the following naming convention:
-
-	WD_V_A_name.ext
-	││ │ │ │    └── file extension
-	││ │ │ └─────── file name
-	││ │ └───────── author name (initial)
-	││ └─────────── version
-	│└───────────── day
-	└────────────── week
 
 ## Company
 AstraZeneca (https://www.astrazeneca.com/)
@@ -162,7 +153,7 @@ Construct edge_list for future graph creation. The list ought to contain:
 - Weight 
 
 #### Step6. 
-Construct the graph using the edge_list and load node attributes from node_list. Save as .pkl; Save as .gexf 
+Construct the graph using the edge_list and load node attributes from node_list. Save as .pkl; Save as .gexf.
 
 #### Step7. 
 Select disease-only-subgraph. Run statistics:
@@ -221,9 +212,29 @@ Finally, after the .gexf files have been imported, one can use the open source g
 	
 	'/reports/figures/Graph'
 
-## Results
+## Subpart 2.1.4. Results
 
-![Alt text](reports/figures/Graph/Hierarchy1.png?raw=true "Title")
+### Disease-Drug graph for top-N nodes only
+Using gephi, we can construct a subgraph by filtering out all the edges whose normalized weight is small. The resulting subgraph can be filtered again based on the Degree of the remaining nodes. In this way we can get a clean image of the most relevant disease/drug nodes present in out graph. The results are shown in the graph below where the green nodes correspond to diseases and the blue nodes correspond to drugs.
+
+<img src="reports/figures/Graph/DD_graph.png" width="600">
+
+### Drug recommendation for a specific disease
+Similarly, we can obtain a subgraph containing a specific disease (in our case "Pancreatic Disesease") in blue, all its neighboring diseases in green, and finally, in red, a node corresponding to the drug "Disparate Innate Cytokine". We can see how the RS-score for this particular case is equal to 1.00 since all the green nodes are connected to the red drug but our target disease, in blue, is not.
+
+<img src="reports/figures/Graph/Fig3.png" width="400">
+
+### MeSH Hierachy Tree
+
+Using Gephi, the underlying tree hierarchy of the Mesh_Tree_id categories can be mapped intoa  single tree-entity. This entity can be represented as a directed graph with the edges direction always pointing from the parent node (category) to its daughter nodes (subcategories). The resulting image is shown below:
+
+<img src="reports/figures/Graph/Hierarchy3.png" width="500">
+
+### RS-score limitations: The 1-neighbor cases
+As an example of the bias that exists within the RS-score, we can see in the following graphs (Not generated with Gephi, but with NetworkX internal library) a few examples of cases where the RS score comes out as 1.00, but the neighbors connecting the target disease, and the recommended drug is very little (equal to 1). The examples in the lower row, although more relevant from a statistical point of view, come out with a lower RS score.
+
+
+<img src="reports/figures/Graph/Fig4.png" width="800">
 
 
 # PART 2.2 - Time Series Analysis
@@ -275,16 +286,34 @@ Output visualizations folder: `/reports/figures/desc`<br/>
 
 
 # PART 3 - Sample Classification (Bonus)
+Objective: to label sample titles per study into control vs. non-control or healthy vs. diseased.<br/>
+<br/>
+Examples of sample tiltles:<br/>
+Study 1: MM253 24 h TPA, LSPM2 Control, LSPM2 Control Recovery<br/>
+Study 2: 3AMH02030706_Liver, MGMH030312023Aovary, 3AJZ02053105_SmoothMuscle<br/>
+Study 3: NHGRI_CRL-1634, NHGRI_UACC-457, MM127 Control, NHGRI_M93-047, NHGRI_NilC<br/>
+<br/>
+Two methods were used: (1) heuristic string matching and (2) clustering.<br/>
+
 ## Subpart 3.1: Labeling samples using _string_matching_heuristic_
-Uses predefined list to label the sample titles.
+Use a vocabulary, i.e., a predefined list. For example, Control = ['healthy', 'control', 'not infected', 'normal'].<br/>
+<br/>
+Compare the sample titles with this vocabulary by<br/>
+(1) Exact string matching<br/>
+(2) Fuzzy string matching<br/>
+
 Uses `samples.pkl` as input data.<br/>
 Run: `src/clustering/samples_string_matching_heuristic.ipynb`<br/>
 
+Around 20% to 25% of the studies could be classified in this manner.<br/>
+
 ## Subpart 3.2: Labeling samples using clustering method
-A clustering method (Affinity propagation with Levenshtein distance) clusters the sample titles and a labeling method (longest common substring) assigns labels to the clusters.
+Use a clustering method (Affinity propagation with Levenshtein distance) to cluster the sample titles.<br/>
+Use a labeling method (longest common substring) to assign labels to the clusters.<br/>
+
 Uses `samples.pkl` as input data.<br/>
 Run: `src/clustering/samples_clustering.ipynb`<br/>
 
-Only examples shown;<br/>
-Problems with the method and potential improvements are mentioned.
+The notebook shows examples of the clustering and labeling, including successful and problematic labeling.<br/>
+Problems with the method and potential improvements are also mentioned.
 
