@@ -268,13 +268,13 @@ Finally, after the .gexf files have been imported, one can use the open source g
 
 
 # PART 3 - Sample Classification (Bonus)
-	# Subpart 3.1: labeling samples using _string_matching_heuristic_
-    Uses predefined list to label the sample titles 
-    uses samples.pkl as input data
+## Subpart 3.1: Labeling samples using _string_matching_heuristic_
+Uses predefined list to label the sample titles 
+Uses samples.pkl as input data
 
-    # Subpart 3.2: labeling samples using clustering method
-    a clustering method (Affinity propagation with Levenshtein distance) clusters the sample titles and a labeling method (longest common substring) assigns labels to the clusters   
-    uses samples.pkl as input data
-    only examples shown
-    problems with the method and potential improvements are mentioned
+## Subpart 3.2: Labeling samples using clustering method
+A clustering method (Affinity propagation with Levenshtein distance) clusters the sample titles and a labeling method (longest common substring) assigns labels to the clusters   
+Uses samples.pkl as input data
+Only examples shown
+Problems with the method and potential improvements are mentioned
 
