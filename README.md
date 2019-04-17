@@ -219,6 +219,7 @@ using Gephi, the underlying tree hierarchy of the Mesh_Tree_id categories can be
 Here is an inline ![smiley](reports/figures/Graph/Hierarchy1.png){:height="36px" width="36px"}.
 ![](reports/figures/Graph/Hierarchy1.png | width=100)
 ![very good|512x397, 20%](reports/figures/Graph/Hierarchy1.png)
+![very good 2|20%](reports/figures/Graph/Hierarchy1.png)
 
 # PART 2.2 - Time Series Analysis
 
