@@ -238,18 +238,17 @@ Finally, after the .gexf files have been imported, one can use the open source g
 Generate data in parts 2.2.1-2.2.3<br/>
 Then visualize in 2.2.4-2.2.5<br/>
 
-
-## Subpart 2.2.1: filter_geo.ipynb
+### Subpart 2.2.1: filter_geo.ipynb
 Filter `geo.pkl`, the data frame containing disease and drug tags, so that disease tags uniquely belong to only the disease category. This excludes categories which are not diseases, like 'Animal models of disease'<br/>
 Run: `src/features/filter_geo.ipynb`<br/>
 Output: `data/final/geo_filtered.pkl`
 
-## Subpart 2.2.2: get_counts_with_descendents.ipynb
+### Subpart 2.2.2: get_counts_with_descendents.ipynb
 Get counts for each disease, for ranking diseases by how studied they are in the GEO data base. This outputs counts of each category and their descendents in the MeSH tree (e.g. the category 'neoplasms' includes counts for all the subtypes of neoplasm, e.g. 'lung neoplasm', 'carcinoma', etc.)<br/>
 Run: `src/features/get_counts_with_descendents`<br/>
 Output: `data/final/meshids_rankedby_NSeries.pkl`
 
-## Subpart 2.2.3: generate_time_series.ipynb
+### Subpart 2.2.3: generate_time_series.ipynb
 Generate time series data: Generates data frames with sample and study counts over time<br/>
 Run: `src/features/generate_time_series`<br/>
 Output:<br/>
